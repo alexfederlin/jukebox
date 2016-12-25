@@ -57,6 +57,27 @@ process.stdin.on('keypress', function (ch, key) {
     var v = ((volume>0) ? volume-10 : 0)
     changeVol(v)
   }
+  if (key && key.name =='right'){
+    console.log("key right")
+    rest.get(host+'/next').on('complete', function(result) {
+      if (result instanceof Error) {
+        console.log('Error:', result.message);
+      } else {
+        console.log(result);
+      }
+    });    
+  }
+  if (key && key.name =='left'){
+    console.log("key left")
+    rest.get(host+'/prev').on('complete', function(result) {
+      if (result instanceof Error) {
+        console.log('Error:', result.message);
+      } else {
+        console.log(result);
+      }
+    });    
+  }
+
 
   if (key && key.ctrl && key.name == 'c') {
     //somehow this does not work...
