@@ -1,0 +1,14 @@
+{
+  "name": "rfidctrl",
+  "version": "1.0.0",
+  "description": "RFID Ctrl",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex",
+  "license": "ISC",
+  "dependencies": {
+    "node-hid": "^0.5.2",
+  }
+}
