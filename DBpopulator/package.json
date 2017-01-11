@@ -1,0 +1,16 @@
+{
+  "name": "dbpopulator",
+  "version": "1.0.0",
+  "description": "Script to populate the DB which maps RFIDs to playlist names for my jukebox",
+  "main": "dbtest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nedb": "^1.8.0",
+    "node-hid": "^0.5.2",
+    "request": "^2.79.0"
+  }
+}
