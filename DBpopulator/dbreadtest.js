@@ -26,7 +26,7 @@ function onRead(error,data){
     resultarray.push(number);
   }
   if (decdata == 40) {
-    rfid = resultarray.join('');
+    rfid = resultarray.join('').slice(-10);
     console.log(rfid);
     findPlaylist(rfid);
     resultarray = [];
