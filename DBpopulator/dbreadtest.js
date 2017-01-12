@@ -28,32 +28,50 @@ function onRead(error,data){
   if (decdata == 40) {
     rfid = resultarray.join('').slice(-10);
     console.log(rfid);
-    findPlaylist(rfid);
+    findPlaylist(rfid, playPlaylist);
     resultarray = [];
     return;
   }
   device.read(onRead);
 }
 
-
 device.read(onRead);
 
-
-
-function findPlaylist(rfid){
-  var request = require('request');
-
+function findPlaylist(rfid, callback){
+  var playlist;
   db.findOne({"rfid":rfid}, function (err, docs){
     if (err) {
       console.log('Error:', err);
     } else {
         console.log(docs);
-        console.log("calling localhost:10081/play/"+docs.playlist)
-        request('http://localhost:10081/play', function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            console.log(body) // Show the HTML for the Google homepage.
-          }
-        })
+        playlist= docs.playlist;
+        console.log("returning playlist: "+playlist);
+        callback(playlist);
     }
   });
+}
+
+function playPlaylist(playlist){
+  var request = require('request');
+  var host ="localhost"
+  var port ="10081"
+  url = "http://localhost:10081/play";
+  requestData = { "entry" : playlist };
+  
+  console.log("start playing playlist "+playlist);
+  
+  request({
+      url: url,
+      method: "POST",
+      json: requestData
+    }, reportStatus);
+
+}
+
+function reportStatus (error, response, body) {
+    if (error){
+      console.log(error);
+      return;
+    }
+    console.log("starting to play: "+response.statusCode);
 }
