@@ -1,0 +1,15 @@
+{
+  "name": "arduinogw",
+  "version": "1.0.0",
+  "description": "Gatway between Arduino and Raspi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexander Federlin <alexander@federlin.de> (www.federlin.de)",
+  "license": "ISC",
+  "dependencies": {
+    "arduino-interface": "^2.0.4",
+    "request": "^2.79.0"
+  }
+}
