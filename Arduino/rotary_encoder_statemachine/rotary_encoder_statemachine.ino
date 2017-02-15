@@ -43,7 +43,8 @@ unsigned int B = 9;             //              "                (digital_pin 3)
 unsigned int ISRflag = 5;       //              "                (digital_pin 3)
          int count = 0;         // count each indent
          int old_count = 0;     // check for count changed
-
+const String VOLUME = "volume/";
+String vol = VOLUME;
 
 /*
  * The below state table has, for each state (row), the new state
@@ -73,9 +74,27 @@ const unsigned char ttable[8][4] = {
     {R_START,    R_START,     R_START,     R_START}                 // ILLEGAL
 };
 
+
+const int buttonPin_back = 2;     // the number of the pushbutton pin
+const int buttonPin_play = 3;     // the number of the pushbutton pin
+const int buttonPin_forward = 4;     // the number of the pushbutton pin
+const int ledPin =  13;      // the number of the LED pin
+
+// variables will change:
+int buttonState_back = 0;         // variable for reading the pushbutton status
+int buttonState_play = 0;         // variable for reading the pushbutton status
+int buttonState_forward = 0;         // variable for reading the pushbutton status
+int sentstate = 0;
+
 void setup( ) {
     pinMode( A, INPUT );
     pinMode( B, INPUT );
+
+    pinMode(ledPin, OUTPUT);      
+  // initialize the pushbutton pin as an input:
+    pinMode(buttonPin_back, INPUT);
+    pinMode(buttonPin_play, INPUT);     
+    pinMode(buttonPin_forward, INPUT);  
 
 #ifdef ENABLEPULLUPS
     digitalWrite( A, HIGH );                // set pullups
@@ -152,7 +171,41 @@ void loop( ) {
           count=0;
           return;
         }
-        Serial.println( count );
+        vol = VOLUME + count; 
+        Serial.println(vol);
         old_count = count;
     }
+
+  // read the state of the pushbutton value:
+  buttonState_back = digitalRead(buttonPin_back);
+  buttonState_play = digitalRead(buttonPin_play);
+  buttonState_forward = digitalRead(buttonPin_forward);
+  
+  
+  // check if the pushbutton is pressed.
+  // if it is, the buttonState is HIGH:
+  if ((buttonState_back == HIGH) && (sentstate == 0)) {     
+    // turn LED on:    
+    digitalWrite(ledPin, HIGH);
+    Serial.println("prev");
+    sentstate = 1;
+  } 
+  else if ((buttonState_play == HIGH) && (sentstate == 0)) {     
+    // turn LED on:    
+    digitalWrite(ledPin, HIGH);  
+    Serial.println("playpause");
+    sentstate = 1;
+  }
+  else if ((buttonState_forward == HIGH) && (sentstate == 0)) {     
+    // turn LED on:    
+    digitalWrite(ledPin, HIGH);  
+    Serial.println("next");
+    sentstate = 1;
+  }
+  else if ((buttonState_back == LOW) && (buttonState_play == LOW) && (buttonState_forward == LOW)){
+    // turn LED off:
+    digitalWrite(ledPin, LOW); 
+    sentstate = 0;
+  }
+        
 }

@@ -12,6 +12,16 @@ var arduino = new Arduino({
 // This will start searching for an Arduino and connect to it once one is found
 arduino.connect();
  
+function sendMessage(message) {
+  console.log('sending message ',message,'.')
+  request('http://localhost:10081/'+message, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body) 
+     }
+  })
+
+}
+
 arduino.on('connect', function() {
   console.log('Arduino connected.');
 });
@@ -20,9 +30,18 @@ arduino.on('disconnect', function() {
 });
 arduino.on('data', function(message) {
   console.log('Data received: ' + message);
-  request('http://localhost:10081/volume/'+message, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        console.log(body) // Print the google web page.
-     }
-  })
+  if (message.startsWith('playpause')) {
+    console.log('querying status')
+    request('http://localhost:10081/status', function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        stat = JSON.parse(body)
+        message = (stat.state.startsWith('play')) ? 'pause' : 'play';
+        console.log(stat.state, " --> ", message) 
+        sendMessage(message);
+      }
+    })  
+  }
+  else {
+    sendMessage(message);
+  }
 });
