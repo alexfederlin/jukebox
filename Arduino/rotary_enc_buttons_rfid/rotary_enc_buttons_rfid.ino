@@ -81,6 +81,8 @@ uint8_t* buffer_end = buffer + sizeof(buffer);
  
 void rfid_read(void);
 uint8_t rfid_get_next(void);
+unsigned long time;
+unsigned long lasttime;
 ////////////////////////////////
 
 
@@ -112,12 +114,15 @@ void setup( ) {
     Serial.println( "Jukebox Input Module Online" );
     
     // Open software serial connection to RFID module
-    pinMode(rfid_tx_pin,INPUT);
+    //pinMode(rfid_tx_pin,INPUT);
     rfid.begin(9600);
  
     // Listen for interrupt from RFID module
     attachInterrupt(rfid_irq,rfid_read,FALLING);
-
+    
+    lasttime = 0L;
+    time = 0L;
+    
   
 }
 
@@ -221,14 +226,29 @@ void loop( ) {
     //Serial.print("Reading: ");
     //Serial.print(result);
  
-    if ( checksum == data_checksum )
-      Serial.println(result);
-      //Serial.println(" OK");
-    else
+    if ( checksum == data_checksum ) {
+      if (lasttime > 0L) {
+        time = millis();
+        digitalWrite(ledPin, HIGH); 
+        if ( time > (lasttime+2000L) ){
+          Serial.println(time);
+          Serial.println(lasttime);
+          Serial.println(result);
+          lasttime = millis();
+        }
+        result = 0;
+        ready = false;
+        digitalWrite(ledPin, LOW); 
+      }
+    }
+    else {
       Serial.println(" CHECKSUM FAILED");
- 
+      ready = false;
+    }
+    lasttime = lasttime+1L;
+     
     // We're done processing, so there is no current value    
-    ready = false;
+    //ready = false;
   }
 
 
