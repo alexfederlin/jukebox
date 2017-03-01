@@ -1,3 +1,5 @@
+// this code based on the example code on http://playground.arduino.cc/Main/RDM630RFIDReaderLibrary
+
 #include "rdm630.h"
 
 rdm630 rfid(2, 0);  //TX-pin of RDM630 connected to Arduino pin 2

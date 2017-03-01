@@ -1,3 +1,6 @@
+// this library liberated from 
+// https://github.com/LieBtrau/Aiakos/tree/a6ed7b2c91bc4e02473b41cb376f8add3917920a
+
 #ifndef RDM630_H
 #define RDM630_H
 
