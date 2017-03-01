@@ -19,7 +19,7 @@ void setup()
     time = millis();
     lastTime = millis();
     block = false;
-    blocktimer = 0;
+    blocktimer = 0L;
 }
 
 void loop()
