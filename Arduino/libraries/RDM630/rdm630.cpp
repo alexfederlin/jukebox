@@ -42,8 +42,13 @@ rdm630::state rdm630::dataParser(state s, byte c){
         }
         break;
     case READING_DATA:
- 
+        // this loop starts with _NibbleCtr = 0, since the -1 we're going in with is incremented before the expression is evaluated
         if(++_iNibbleCtr<12){
+            //data for _iNibbleCtr right shifted by 1 is assigned (but _iNibbleCtr itself is not changed), so in effect _iNibbleCtr/2
+            //if (_iNibbleCtr & 0x1)==0 // if least significant bit of _iNibbleCtr equals 1
+            //  _data[_iNibbleCtr>>1]= AsciiCharToNum(c)<<4 // the left 4 bits of the octet stored in _data[_iNibbleCtr>>1] are set
+            //else
+            //  _data[_iNibbleCtr>>1]=_data[_iNibbleCtr>>1] + AsciiCharToNum(c) // then, the values for the right 4 bits are added to that
             _data[_iNibbleCtr>>1]=((_iNibbleCtr & 0x1)==0?AsciiCharToNum(c)<<4 : _data[_iNibbleCtr>>1] + AsciiCharToNum(c));
             return READING_DATA;
         }
