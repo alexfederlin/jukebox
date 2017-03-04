@@ -50,7 +50,7 @@ void loop()
             if (memcmp(lastdata,data,length) != 0 || block == false) { 
               //Serial.println("Data valid");
               for(int i=0;i<length;i++){
-                  Serial.print(data[i],BIN);
+                  Serial.print(data[i],HEX);
                   Serial.print(" ");
               }
               //shift the bytes to their respective positions

@@ -41,6 +41,15 @@ arduino.on('data', function(message) {
       }
     })  
   }
+  if (message.startsWith('RFID')) {
+    var arr = message.split(" ");
+    console.log('rfidtag: '+arr[1])
+    request('http://localhost:4000/play/'+arr[1], function (error, response, body) {
+       if (!error && response.statusCode == 200) {
+          console.log(response)        
+       }
+    })  
+  }
   else {
     sendMessage(message);
   }
