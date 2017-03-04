@@ -9,13 +9,31 @@ var Datastore = require('nedb')
 app.get('/play/:rfid', RespondToPlay);
 
 
-app.get('/getplaylist/:rfid', function (req, res) {
-  res.send('Returning playlist associated with RFID tag '+req.params.rfid+'!')
-})
+app.get('/getplaylist/:rfid', RespondToGetPlaylist);
 
 app.listen(port, function () {
   console.log('Example app listening on port '+port+'!')
 })
+
+function RespondToGetPlaylist(req, res) {
+  var reply = {
+    rfid: req.params.rfid,
+    playlist: "N/A"
+  }
+  db.findOne({"rfid":req.params.rfid}, function (err, docs){
+    if (err) {
+      console.error(err)
+      return
+    }
+    if ( typeof docs !== 'undefined' && docs ) {
+      reply.playlist = docs.playlist
+      res.send(JSON.stringify(reply))
+    }
+    else {
+      res.send(JSON.stringify(reply))
+    }
+  })
+}
 
 function RespondToPlay (req, res) {
   var reply =('Playing playlist associated with RFID tag '+req.params.rfid+'!')
