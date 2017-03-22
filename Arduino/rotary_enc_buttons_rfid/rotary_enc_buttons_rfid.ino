@@ -10,7 +10,10 @@
 #include    <MsTimer2.h>
 #include <SoftwareSerial.h>
 #include "rdm630.h"
+#include <LiquidCrystal.h>
 
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(A0, A1, A2, A3, A4, A5);
 
 // Rotary Encoder Stuff
 
@@ -107,7 +110,9 @@ void setup( ) {
 
     Serial.begin( 9600 );
     Serial.println( "Jukebox Input Module Online" );
-    
+    lcd.begin(16, 2);
+  // Print a message to the LCD.
+  lcd.print("Jukebox Online");
 
 }
 
@@ -125,6 +130,11 @@ void T2_isr( ) {
 
 }
 
+void lcdDisplay(String str) {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(str);
+}
 
 
 void loop( ) {
@@ -141,6 +151,7 @@ void loop( ) {
         }
         vol = VOLUME + count; 
         Serial.println(vol);
+        lcdDisplay(vol);
         old_count = count;
     }
 
@@ -157,18 +168,21 @@ void loop( ) {
     // turn LED on:    
     digitalWrite(ledPin, HIGH);
     Serial.println("prev");
+    lcdDisplay("prev");
     sentstate = 1;
   } 
   else if ((buttonState_play == HIGH) && (sentstate == 0)) {     
     // turn LED on:    
     digitalWrite(ledPin, HIGH);  
     Serial.println("playpause");
+    lcdDisplay("playpause");
     sentstate = 1;
   }
   else if ((buttonState_forward == HIGH) && (sentstate == 0)) {     
     // turn LED on:    
     digitalWrite(ledPin, HIGH);  
     Serial.println("next");
+    lcdDisplay("next");
     sentstate = 1;
   }
   else if ((buttonState_back == LOW) && (buttonState_play == LOW) && (buttonState_forward == LOW)){
@@ -197,6 +211,7 @@ void loop( ) {
               unsigned long result = ((unsigned long int)data[1]<<24) + ((unsigned long int)data[2]<<16) + ((unsigned long int)data[3]<<8) + data[4];              
               Serial.print("RFID: ");
               Serial.println(result);
+              lcdDisplay(String(result));
               rfid.getData(lastdata,length);
               blocktimer = millis();
             }
@@ -205,6 +220,10 @@ void loop( ) {
         delay(5);
         digitalWrite(ledPin, LOW); 
     }
+
+  lcd.setCursor(0, 1);
+  // print the number of seconds since reset:
+  lcd.print(millis() / 1000);
 }
 
 
