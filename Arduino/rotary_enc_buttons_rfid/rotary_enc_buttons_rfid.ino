@@ -15,6 +15,41 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(A0, A1, A2, A3, A4, A5);
 
+byte playicon[8] =
+{
+  0b10000,
+  0b11000,
+  0b11100,
+  0b11110,
+  0b11110,
+  0b11100,
+  0b11000,
+  0b10000
+};
+
+byte pauseicon[8]  = {
+  0b00000,
+  0b11011,
+  0b11011,
+  0b11011,
+  0b11011,
+  0b11011,
+  0b11011,
+  0b00000
+};
+
+byte stopicon[8] = {
+  0b00000,
+  0b00000,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b00000
+};
+
+
 // Rotary Encoder Stuff
 
 #define DIR_NONE 0x00           // No complete step yet.
@@ -110,10 +145,15 @@ void setup( ) {
 
     Serial.begin( 9600 );
     Serial.println( "Jukebox Input Module Online" );
-    lcd.begin(16, 2);
-  // Print a message to the LCD.
-  lcd.print("Jukebox Online");
 
+    lcd.createChar(0, playicon);
+    lcd.createChar(1, pauseicon);
+    lcd.createChar(2, stopicon);
+    lcd.begin(16, 2);
+    // Print a message to the LCD.
+    lcd.print("Jukebox Online");
+    lcd.setCursor(15,0);
+    lcd.write((uint8_t)2);
 }
 
 // Timer method for Rotary Encoder polling
@@ -175,7 +215,9 @@ void loop( ) {
     // turn LED on:    
     digitalWrite(ledPin, HIGH);  
     Serial.println("playpause");
-    lcdDisplay("playpause");
+    //lcdDisplay("playpause");
+    lcd.setCursor(15,0);
+    lcd.write((uint8_t)0);
     sentstate = 1;
   }
   else if ((buttonState_forward == HIGH) && (sentstate == 0)) {     
