@@ -10,15 +10,30 @@ var express = require('express')
 var app = express()
 var port = 4000
 
+var mpd = require('mpd'),
+    cmd = mpd.cmd
+var client = mpd.connect({
+  port: 6600,
+  host: 'localhost',
+});
+client.on('ready', function() {
+  console.log("ready");
+});
+
+
 var Datastore = require('nedb')
   db = new Datastore({ filename: '/home/alex/Daten/Projekte/Development/jukebox/DBpopulator/database.db', autoload: true });
 
 app.get('/getplaylist/:rfid', RespondToGetPlaylist);
 
+app.get('/getplaylists', RespondToGetPlaylists);
+
 app.listen(port, function () {
   console.log('Playlistmapper listening on port '+port+'!')
 })
 
+
+//return the playlist associated to RFID tag passed in the request
 function RespondToGetPlaylist(req, res) {
   var reply = {
     rfid: req.params.rfid,
@@ -38,4 +53,15 @@ function RespondToGetPlaylist(req, res) {
     res.send(JSON.stringify(reply))
     console.log ("sending out reply: ",JSON.stringify(reply))
   })
+}
+
+
+//
+function RespondToGetPlaylists(req, res) {
+    client.sendCommand(cmd("listplaylists",[]),function(err, msg) {
+    if (err) throw err;
+    console.log(msg);
+    res.send(JSON.stringify(msg))
+  });
+
 }
