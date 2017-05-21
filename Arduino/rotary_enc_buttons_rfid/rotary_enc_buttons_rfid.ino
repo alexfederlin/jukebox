@@ -56,9 +56,9 @@ byte stopicon[8] = {
 #define DIR_CW   0x10           // Clockwise step.
 #define DIR_CCW  0x20           // Anti-clockwise step.
 
-unsigned int A = 8;             // pins connected to the encoder (digital_pin 2)
-unsigned int B = 9;             //              "                (digital_pin 3)
-unsigned int ISRflag = 6;       //              "                (digital_pin 3)
+unsigned int A = 6;             // pins connected to the encoder (CLK)
+unsigned int B = 7;             //              "                (DT)
+unsigned int ISRflag = 8;       //              "                (SW)
 
 unsigned int state;
          int count = 0;         // count each indent
@@ -241,7 +241,6 @@ void loop( ) {
 
     if(rfid.available()){
         digitalWrite(ledPin, HIGH);
-       
         if ((time - lastTime) < 1000) { // used to filter out sporadic spurious IDs
           
             rfid.getData(data,length);
