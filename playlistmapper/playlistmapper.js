@@ -22,7 +22,8 @@ client.on('ready', function() {
 
 
 var Datastore = require('nedb')
-  db = new Datastore({ filename: '/home/alex/Daten/Projekte/Development/jukebox/DBpopulator/database.db', autoload: true });
+//  db = new Datastore({ filename: '/home/alex/Daten/Projekte/Development/jukebox/DBpopulator/database.db', autoload: true });
+  db = new Datastore({ filename: 'database.db', autoload: true });
 
 app.get('/getplaylist/:rfid', RespondToGetPlaylist);
 
