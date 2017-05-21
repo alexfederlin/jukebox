@@ -241,7 +241,6 @@ void loop( ) {
 
     if(rfid.available()){
         digitalWrite(ledPin, HIGH);
-       
         if ((time - lastTime) < 1000) { // used to filter out sporadic spurious IDs
           
             rfid.getData(data,length);
