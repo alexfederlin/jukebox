@@ -52,6 +52,8 @@ byte stopicon[8] = {
   0b00000
 };
 
+int lcdCurBrightness = 0;
+unsigned long lcdLastRaise;
 
 // Rotary Encoder Stuff
 
@@ -137,10 +139,35 @@ void T2_isr( ) {
 }
 
 
+void lcdDim( ) {
+  int lowest = 50;
+  for (int fadeValue = lcdCurBrightness ; fadeValue >= lowest; fadeValue -= 5) {
+    // sets the value (range from 0 to 255):
+    analogWrite(lcdBacklightPin, fadeValue);
+    // wait for 30 milliseconds to see the dimming effect
+    delay(30);
+  }
+  lcdCurBrightness = lowest;
+}
+
+void lcdRaise( ) {
+  int highest = 255;
+  for (int fadeValue = lcdCurBrightness ; fadeValue <= highest; fadeValue += 5) {
+    // sets the value (range from 0 to 255):
+    analogWrite(lcdBacklightPin, fadeValue);
+    delay(5);
+  }
+  lcdCurBrightness = highest;
+  lcdLastRaise = millis();
+}
+
+
 void setup( ) {
 
     //set backlight brightness. Values between 0-255
-    analogWrite (lcdBacklightPin, 200);
+    //analogWrite (lcdBacklightPin, 200);
+
+    lcdRaise();
 
     pinMode( A, INPUT );
     pinMode( B, INPUT );
@@ -201,6 +228,7 @@ void loop( ) {
         Serial.println(vol);
         lcdDisplay(vol);
         old_count = count;
+        lcdRaise();
     }
 
 //Pushbuttons
@@ -218,6 +246,7 @@ void loop( ) {
     Serial.println("prev");
     lcdDisplay("prev");
     sentstate = 1;
+    lcdRaise();
   } 
   else if ((buttonState_play == HIGH) && (sentstate == 0)) {     
     // turn LED on:    
@@ -227,6 +256,7 @@ void loop( ) {
     lcd.setCursor(15,0);
     lcd.write((uint8_t)0);
     sentstate = 1;
+    lcdRaise();
   }
   else if ((buttonState_forward == HIGH) && (sentstate == 0)) {     
     // turn LED on:    
@@ -234,6 +264,7 @@ void loop( ) {
     Serial.println("next");
     lcdDisplay("next");
     sentstate = 1;
+    lcdRaise();
   }
   else if ((buttonState_back == LOW) && (buttonState_play == LOW) && (buttonState_forward == LOW)){
     // turn LED off:
@@ -263,6 +294,7 @@ void loop( ) {
               lcdDisplay(String(result));
               rfid.getData(lastdata,length);
               blocktimer = millis();
+              lcdRaise();
             }
         }
         lastTime = millis();
@@ -273,6 +305,9 @@ void loop( ) {
   lcd.setCursor(0, 1);
   // print the number of seconds since reset:
   lcd.print(millis() / 1000);
+
+  if (millis() - lcdLastRaise > 10000) lcdDim();
+
 }
 
 
