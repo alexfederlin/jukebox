@@ -12,7 +12,7 @@ var device = new HID.HID('5050','24');
 var resultarray = [];
 var rfid = 0;
 
-function onRead(error,data){
+function onRead(error,data, callback){
 
   var hexdata=data.toString('hex').slice(4,6);
   var decdata=parseInt(hexdata,16);
@@ -27,15 +27,22 @@ function onRead(error,data){
   }
   if (decdata == 40) {
     rfid = resultarray.join('').slice(-10);
-    console.log(rfid);
-    findPlaylist(rfid, playPlaylist);
+    //console.log(rfid);
+    //findPlaylist(rfid, playPlaylist);
+    callback(rfid);
     resultarray = [];
     return;
   }
-  device.read(onRead);
+  device.read(onRead, doneYet);
 }
 
-device.read(onRead);
+
+device.read(onRead(doneYet));
+
+function doneYet(rfid) {
+	console.log("RFID read: "+rfid);
+}
+
 
 function findPlaylist(rfid, callback){
   var playlist;

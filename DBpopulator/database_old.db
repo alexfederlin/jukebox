@@ -1,0 +1,7 @@
+{"RFID":"123","playlist":"plA","_id":"6awWU29L4IabOzM3"}
+{"rfid":0,"playlist":"plA","_id":"HAuBh1SdWVK9F6NR"}
+{"RFID":"456","playlist":"plB","_id":"YKxLa66cIQkUTXXf"}
+{"$$indexCreated":{"fieldName":"RFID","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"rfid","unique":true}}
+{"$$indexCreated":{"fieldName":"rfid","unique":true}}
+{"$$indexCreated":{"fieldName":"rfid","unique":true}}
