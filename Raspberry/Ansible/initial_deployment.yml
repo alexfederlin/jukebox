@@ -1,0 +1,16 @@
+
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: force apt to use IPv4
+      lineinfile:
+        dest: /etc/apt/apt.conf.d/99force-ipv4
+        state: present
+        create: yes
+        line: 'Acquire::ForceIPv4 "true";'
+        owner: root
+        group: root
+        mode: 0644
+      become: yes
+...
