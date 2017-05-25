@@ -32,6 +32,10 @@
 // - playlistmapper must be running and configured to translate RFID tags to playlists present in mpd
 
 
+var onoff = require('onoff');
+var Gpio = onoff.Gpio,
+    relais = new Gpio(4, 'out'); //RPi HW Pin 7
+
 var SerialPort = require("serialport");
 var arduino = new SerialPort("/dev/ttyACM0", {
   baudRate: 9600,
@@ -57,6 +61,9 @@ function sendMessage(message) {
 
 arduino.on('connect', function() {
   console.log('Arduino connected.');
+  relais.write(0, function() {
+    console.log("Relais switched on");
+  });
 });
 
 arduino.on('disconnect', function() {
