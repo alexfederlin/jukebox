@@ -4,8 +4,8 @@ Description=Playlistmapper
 
 [Service]
 ExecStart=/usr/local/bin/node /home/pi/jukebox/Raspberry/playlistmapper/playlistmapper.js
-# Required on some systems
-#WorkingDirectory=/opt/nodeserver
+# Required for finding database.db
+WorkingDirectory=/home/pi/jukebox/Raspberry/playlistmapper
 Restart=always
  # Restart service after 10 seconds if node service crashes
  RestartSec=10
