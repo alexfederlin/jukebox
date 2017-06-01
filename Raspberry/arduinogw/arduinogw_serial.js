@@ -32,21 +32,22 @@
 // - playlistmapper must be running and configured to translate RFID tags to playlists present in mpd
 
 
-var Arduino = require('arduino-interface');
+var onoff = require('onoff');
+var Gpio = onoff.Gpio,
+    relais = new Gpio(4, 'out'); //RPi HW Pin 7
+
+var SerialPort = require("serialport");
+var arduino = new SerialPort("/dev/ttyACM0", {
+  baudRate: 9600,
+  parser: SerialPort.parsers.readline('\n')
+});
 var request = require('request');
 
 const mipodurl = 'http://localhost:10081/'
 const playlistmapperurl = 'http://localhost:4000/'
-var arduino = new Arduino({
-  baudrate: 9600,
-  board: 'uno',
-  nmea: true,
-  debug: true
-});
  
 // Connect to the Arduino
 // This will start searching for an Arduino and connect to it once one is found
-arduino.connect();
  
 function sendMessage(message) {
   console.log('sending message '+message+'.')
@@ -60,10 +61,13 @@ function sendMessage(message) {
 
 arduino.on('connect', function() {
   console.log('Arduino connected.');
+  relais.write(0, function() {
+    console.log("Relais switched on");
+  });
 });
 
 arduino.on('disconnect', function() {
-  console.log('Arduino serial connection closed. It will try to be reopened.');
+  console.log('Arduino serial connection closed.');
 });
 
 
