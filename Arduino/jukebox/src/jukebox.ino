@@ -164,27 +164,31 @@ void lcdRaise( ) {
 
 void setup( ) {
 
-    //set backlight brightness. Values between 0-255
-    //analogWrite (lcdBacklightPin, 200);
-
+//initialize LCD
     lcdRaise();
-
+    lcd.createChar(0, playicon);
+    lcd.createChar(1, pauseicon);
+    lcd.createChar(2, stopicon);
+    lcd.begin(16, 2);
+    
+// initialize the Rotary Encoder
+    // pins as an input
     pinMode( A, INPUT );
     pinMode( B, INPUT );
+    // start interrupt polling
+    MsTimer2::set( 1, T2_isr );
+    MsTimer2::start( );
+    state = (digitalRead( A ) << 1) | digitalRead( B );     // Initialise state.
+    old_count = 0;
 
+//set up visual feedback for button push and RFID action
     pinMode(ledPin, OUTPUT);      
-  // initialize the pushbutton pin as an input:
+
+// initialize the pushbutton pin as an input:
     pinMode(buttonPin_back, INPUT);
     pinMode(buttonPin_play, INPUT);     
     pinMode(buttonPin_forward, INPUT);  
 
-
-    MsTimer2::set( 1, T2_isr );             // interrupt polling:
-    MsTimer2::start( );
-
-
-    state = (digitalRead( A ) << 1) | digitalRead( B );     // Initialise state.
-    old_count = 0;
 
 // initialize RFID
     rfid.begin();
@@ -192,14 +196,12 @@ void setup( ) {
     lastTime = millis();
     blocktimer = 0L;
 
+// initialize Serial connection
+
     Serial.begin( 9600 );
     Serial.println( "Jukebox Input Module Online" );
 
-    lcd.createChar(0, playicon);
-    lcd.createChar(1, pauseicon);
-    lcd.createChar(2, stopicon);
-    lcd.begin(16, 2);
-    // Print a message to the LCD.
+// Print a message to the LCD.
     lcd.print("Jukebox Online");
     lcd.setCursor(15,0);
     lcd.write((uint8_t)2);
