@@ -15,6 +15,62 @@
       become: yes
     - name: force audio through 3.5mm jack
       command: /usr/bin/amixer cset numid=3 1
-      
+    - name: update upgrade 
+      apt: 
+        update_cache: yes
+        upgrade: safe
+      become: yes
+    - name: install mpc 
+      apt: 
+        name: mpc
+      become: yes
+    - name: install mpd 
+      apt: 
+        name: mpd
+      become: yes
+    - name: install git 
+      apt: 
+        name: git
+      become: yes
+    - name: install rsync
+      apt: 
+        name: rsync
+      become: yes
+    - name: download new node version
+      get_url:
+        url: http://nodejs.org/dist/v7.9.0/node-v7.9.0-linux-armv6l.tar.gz
+        dest: /tmp/node-v7.9.0-linux-armv6l.tar.gz
+        checksum: "sha256:c3058ba99f18bf8db7798a171a0709fc3e4b1c1f6d80f0673496ac325c9a1911"
+    - name: extract node
+      unarchive:
+        copy: no
+        remote_src: yes
+        src: /tmp/node-v7.9.0-linux-armv6l.tar.gz
+        dest: /tmp
+    - name: copy node/bin to where it needs to be
+      shell: mv /tmp/node-v7.9.0-linux-armv6l/bin/* /usr/local/bin
+      args:
+        creates: /usr/local/bin/node
+      become: yes
+    - name: copy node/include to where it needs to be
+      shell: mv /tmp/node-v7.9.0-linux-armv6l/include/* /usr/local/include
+      args:
+        creates: /usr/local/include/node
+      become: yes
+    - name: copy node/lib to where it needs to be
+      shell: mv /tmp/node-v7.9.0-linux-armv6l/lib/* /usr/local/lib
+      args:
+        creates: /usr/local/lib/node_modules
+      become: yes
+    - name: copy node/share to where it needs to be
+      shell: mv /tmp/node-v7.9.0-linux-armv6l/share/* /usr/local/share
+      args:
+        creates: /usr/local/share/doc/node
+      become: yes
+    - name: remove tmp files
+      shell: rm -rf /tmp/node-v7.9.0-linux-armv6l*
+      args:
+        removes: /tmp/node-v7.9.0-linux-armv6l/
+
 
 ...
