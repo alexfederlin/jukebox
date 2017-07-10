@@ -1,0 +1,37 @@
+
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: start rsyncd by default
+      lineinfile:
+        dest: /etc/default/rsync
+        regexp: '^RSYNC_ENABLE=false'
+        line: 'RSYNC_ENABLE=true'
+      become: yes
+    - name: copy template rsycd.conf to jb
+      copy:
+        src: ./rsyncd_template.conf
+        dest: /etc/rsyncd.conf
+        force: no
+      become: yes
+    - name: fix owner of /var/lib/mpd/music
+      file: 
+        path: /var/lib/mpd/
+        recurse: yes
+        owner: mpd
+        group: audio
+      become: yes
+    - name: enable rsync to start at boot
+      systemd:
+        name: rsync
+        enabled: yes
+      become: yes
+    - name: start rsync
+      service:
+        name: rsync
+        enabled: true
+        use: service
+      become: yes
+
+...
