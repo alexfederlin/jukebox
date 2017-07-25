@@ -1,6 +1,7 @@
 [Unit]
 Description=arduinogw
-Requires=After=jukebox_mipod.service       # Requires the mysql service to run first
+# Requires the mysql service to run first
+Requires=After=jukebox_mipod.service       
 
 [Service]
 ExecStart=/usr/local/bin/node /home/pi/jukebox/Raspberry/arduinogw/arduinogw_serial.js

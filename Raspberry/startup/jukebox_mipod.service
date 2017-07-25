@@ -1,7 +1,6 @@
 
 [Unit]
 Description=mipod Server
-#Requires=After=mysql.service       # Requires the mysql service to run first
 
 [Service]
 ExecStart=/usr/local/bin/node /usr/local/lib/node_modules/mipod/mipod-rest.js -p=10081

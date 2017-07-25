@@ -1,6 +1,5 @@
 [Unit]
 Description=relaiscontrol
-Requires=After=jukebox_mipod.service       # Requires the mysql service to run first
 
 [Service]
 ExecStart=/usr/bin/gpio mode 7 out

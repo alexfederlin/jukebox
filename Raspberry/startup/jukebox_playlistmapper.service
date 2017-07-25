@@ -1,6 +1,5 @@
 [Unit]
 Description=Playlistmapper
-#Requires=After=mysql.service       # Requires the mysql service to run first
 
 [Service]
 ExecStart=/usr/local/bin/node /home/pi/jukebox/Raspberry/playlistmapper/playlistmapper.js
