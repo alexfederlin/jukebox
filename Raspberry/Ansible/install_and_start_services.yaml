@@ -1,0 +1,55 @@
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: copy startup scripts to systemd folder
+      shell: cp /home/pi/jukebox/Raspberry/startup/* /etc/systemd/system
+      become: yes
+    - name: make service files executable  
+      shell: chmod u+rwx /etc/systemd/system/jukebox*
+      become: yes
+    - name: enable jukebox_arduinogw to start at boot
+      systemd:
+        name: jukebox_arduinogw
+        enabled: yes
+      become: yes
+    - name: start jukebox_arduinogw
+      service:
+        name: jukebox_arduinogw
+        enabled: true
+        use: service
+      become: yes
+    - name: enable jukebox_mipod to start at boot
+      systemd:
+        name: jukebox_mipod
+        enabled: yes
+      become: yes
+    - name: start jukebox_mipod
+      service:
+        name: jukebox_mipod
+        enabled: true
+        use: service
+      become: yes
+    - name: enable jukebox_playlistmapper to start at boot
+      systemd:
+        name: jukebox_playlistmapper
+        enabled: yes
+      become: yes
+    - name: start jukebox_playlistmapper
+      service:
+        name: jukebox_playlistmapper
+        enabled: true
+        use: service
+      become: yes
+    - name: enable jukebox_relaiscontrol to start at boot
+      systemd:
+        name: jukebox_relaiscontrol
+        enabled: yes
+      become: yes
+    - name: start jukebox_relaiscontrol
+      service:
+        name: jukebox_relaiscontrol
+        enabled: true
+        use: service
+      become: yes
+...

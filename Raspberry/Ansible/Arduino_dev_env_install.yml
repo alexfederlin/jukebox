@@ -1,0 +1,17 @@
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: install python-pip
+      apt: 
+        name: python-pip
+      become: yes
+    - name: install platformio
+      shell: pip install -U platformio
+      become: yes
+    - name: install udev rule
+      get_url:
+        url: https://raw.githubusercontent.com/platformio/platformio-core/develop/scripts/99-platformio-udev.rules
+        dest: /etc/udev/rules.d/99-platformio-udev.rules
+      become: yes
+...                           

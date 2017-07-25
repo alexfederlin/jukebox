@@ -1,0 +1,25 @@
+
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: copy template asound.conf to jb
+      copy:
+        src: ./asound_template.conf
+        dest: /etc/asound.conf
+        force: no
+      become: yes
+    - name: copy template mpd.conf to jb
+      copy:
+        src: ./mpd_template_USB.conf
+        dest: /etc/mpd.conf
+        backup: yes
+        force: yes
+      become: yes
+    - name: restart mpd
+      systemd:
+        name: mpd
+        state: restarted
+      become: yes
+
+...

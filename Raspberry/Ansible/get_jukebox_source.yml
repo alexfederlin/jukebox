@@ -1,0 +1,15 @@
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: git clone jukebox
+      git:
+        repo: https://github.com/alexfederlin/jukebox.git
+        dest: /home/pi/jukebox
+    - name: install modules for arduinogw
+      npm:
+        path: /home/pi/jukebox/Raspberry/arduinogw
+    - name: install modules for playlistmapper
+      npm:
+        path: /home/pi/jukebox/Raspberry/playlistmapper
+... 

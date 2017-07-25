@@ -41,6 +41,10 @@
       apt: 
         name: rsync
       become: yes
+    - name: install wiringpi
+      apt:
+        name: wiringpi
+      become: yes
     - name: download new node version
       get_url:
         url: http://nodejs.org/dist/v7.9.0/node-v7.9.0-linux-armv6l.tar.gz
@@ -76,6 +80,5 @@
       shell: rm -rf /tmp/node-v7.9.0-linux-armv6l*
       args:
         removes: /tmp/node-v7.9.0-linux-armv6l/
-
 
 ...
