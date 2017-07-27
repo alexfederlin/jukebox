@@ -56,6 +56,7 @@ int lcdCurBrightness = 0;
 unsigned long lcdLastRaise;
 
 // Rotary Encoder Stuff
+///////////////////////////////////////////////////////////////////////////////
 
 #define DIR_NONE 0x00           // No complete step yet.
 #define DIR_CW   0x10           // Clockwise step.
@@ -66,9 +67,9 @@ unsigned int B = 7;             //              "                (DT)
 unsigned int ISRflag = 8;       //              "                (SW)
 
 unsigned int state;
-         int count = 0;         // count each indent
+         int count = 40;         // count each indent
          int old_count = 0;     // check for count changed
-const String VOLUME = "volume/";
+const String VOLUME = "CMD: setvol ";
 String vol = VOLUME;
 /*
  * The below state table has, for each state (row), the new state
@@ -103,6 +104,7 @@ const unsigned char ttable[8][4] = {
 
 
 //Button stuff
+///////////////////////////////////////////////////////////////////////////////
 
 const int buttonPin_back = 3;     // the number of the pushbutton pin
 const int buttonPin_play = 4;     // the number of the pushbutton pin
@@ -116,6 +118,8 @@ int sentstate = 0;
 
 
 //RFID Stuff
+///////////////////////////////////////////////////////////////////////////////
+
 rdm630 rfid(2, 0);  //TX-pin of RDM630 connected to Arduino pin 2
 unsigned long time;
 unsigned long lastTime;
@@ -123,6 +127,15 @@ unsigned long elapsedTime;
 unsigned long blocktimer;
 byte lastdata[6];
 bool block;
+
+
+// Serial stuff
+/////////////////////////////////////////////////////////////////////////////// 
+String incomingString = "";
+
+
+// Helper Methods
+///////////////////////////////////////////////////////////////////////////////
 
 // Timer method for Rotary Encoder polling
 void T2_isr( ) {
@@ -161,6 +174,16 @@ void lcdRaise( ) {
   lcdLastRaise = millis();
 }
 
+void lcdDisplay(String str) {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(str);
+}
+
+
+// Setup
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 void setup( ) {
 
@@ -200,21 +223,30 @@ void setup( ) {
 
     Serial.begin( 9600 );
     Serial.println( "Jukebox Input Module Online" );
+    Serial.setTimeout(200);
 
 // Print a message to the LCD.
-    lcd.print("Jukebox Online");
-    lcd.setCursor(15,0);
-    lcd.write((uint8_t)2);
+    lcdDisplay("Jukebox Online");
+//    lcd.setCursor(15,0);
+//    lcd.write((uint8_t)2);
 }
 
-void lcdDisplay(String str) {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(str);
-}
 
+// Loop
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 void loop( ) {
+
+//read from serial
+    if (Serial.available() > 0) {
+       // read the incoming byte:
+       incomingString = Serial.readString();
+       // say what you got:
+       Serial.print("I received: ");
+       Serial.println(incomingString);
+       lcdDisplay(incomingString);
+    }
 
 // Rotary Encoder 
     if( old_count != count ) {
@@ -245,7 +277,7 @@ void loop( ) {
   if ((buttonState_back == HIGH) && (sentstate == 0)) {     
     // turn LED on:    
     digitalWrite(ledPin, HIGH);
-    Serial.println("prev");
+    Serial.println("CMD: previous");
     lcdDisplay("prev");
     sentstate = 1;
     lcdRaise();
@@ -263,7 +295,7 @@ void loop( ) {
   else if ((buttonState_forward == HIGH) && (sentstate == 0)) {     
     // turn LED on:    
     digitalWrite(ledPin, HIGH);  
-    Serial.println("next");
+    Serial.println("CMD: next");
     lcdDisplay("next");
     sentstate = 1;
     lcdRaise();
@@ -304,9 +336,9 @@ void loop( ) {
         digitalWrite(ledPin, LOW); 
     }
 
-  lcd.setCursor(0, 1);
+//  lcd.setCursor(0, 1);
   // print the number of seconds since reset:
-  lcd.print(millis() / 1000);
+//  lcd.print(millis() / 1000);
 
   if (millis() - lcdLastRaise > 10000) lcdDim();
 
