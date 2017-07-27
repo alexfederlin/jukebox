@@ -45,19 +45,46 @@ var request = require('request');
 
 const mipodurl = 'http://localhost:10081/'
 const playlistmapperurl = 'http://localhost:4000/'
+
+var mpd = require('mpd'),
+    cmd = mpd.cmd
+var client = mpd.connect({
+  port: 6600,
+  host: 'localhost',
+});
+client.on('ready', function() {
+  console.log("ready");
+});
+client.on('system', function(name) {
+  console.log("update", name);
+});
  
 // Connect to the Arduino
 // This will start searching for an Arduino and connect to it once one is found
  
-function sendMessage(message) {
-  console.log('sending message '+message+'.')
-  request(mipodurl+message, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        console.log(body) 
-     }
-  })
+// function toMipod(message) {
+//   console.log('sending message to mipod '+message+'.')
+//   request(mipodurl+message, function (error, response, body) {
+//     if (!error && response.statusCode == 200) {
+//         console.log(body) 
+//      }
+//   })
 
+// }
+
+function toMipod(message) {
+  console.log('sending message to mipod '+message+'.');
+  client.sendCommand(cmd(message, []), function (err, msg) {
+    if (err) throw err;
+    console.log(msg);
+  });
+};
+
+function toArduino(message) {
+  console.log('sending message to Arduino '+message+'.');
+  arduino.write(message);
 }
+
 
 arduino.on('connect', function() {
   console.log('Arduino connected.');
@@ -82,29 +109,37 @@ arduino.on('data', function(message) {
         stat = JSON.parse(body)
         message = (stat.state.startsWith('play')) ? 'pause' : 'play';
         console.log(stat.state, " --> ", message) 
-        sendMessage(message);
+        toArduino(message);
+        toMipod(message);
       }
     })  
   }
 
   // RFID needs to be translated to name of playlist by playlistmapper
-  if (message.startsWith('RFID')) {
-    var arr = message.split(" ");
-    console.log('rfidtag: '+arr[1])
-    request(playlistmapperurl+'getplaylist/'+arr[1], function (error, response, body) {
-       if (!error && response.statusCode == 200) {
-          console.log(body)  
-          reply = JSON.parse(body)
-          if (reply.playlist.startsWith('N/A')) 
-            return
-          playPlaylist(reply.playlist)
-       }
-    })  
+  else if (message.startsWith('RFID')) {
+    toMipod('add \"Geschichten/Bobo Siebenschlaefer\"');
+    // var arr = message.split(" ");
+    // console.log('rfidtag: '+arr[1])
+    // request(playlistmapperurl+'getplaylist/'+arr[1], function (error, response, body) {
+    //    if (!error && response.statusCode == 200) {
+    //       console.log(body)  
+    //       reply = JSON.parse(body)
+    //       if (reply.playlist.startsWith('N/A')) 
+    //         return
+    //       playPlaylist(reply.playlist)
+    //    }
+    // })  
+  }
+
+  else if (message.startsWith('I received')) {
+    console.log ("feedback from Arduino received");
   }
 
   // everything else can be passed right on to mopidy
-  else {
-    sendMessage(message);
+  else if (message.startsWith('CMD:')) {
+    var m = message.replace(/^CMD: /, '')
+    console.log ("sending to mipod: ", m)
+    toMipod(m);
   }
 });
 
