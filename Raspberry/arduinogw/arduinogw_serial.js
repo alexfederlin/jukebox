@@ -117,18 +117,34 @@ arduino.on('data', function(message) {
 
   // RFID needs to be translated to name of playlist by playlistmapper
   else if (message.startsWith('RFID')) {
-    toMipod('add \"Geschichten/Bobo Siebenschlaefer\"');
-    // var arr = message.split(" ");
-    // console.log('rfidtag: '+arr[1])
-    // request(playlistmapperurl+'getplaylist/'+arr[1], function (error, response, body) {
-    //    if (!error && response.statusCode == 200) {
-    //       console.log(body)  
-    //       reply = JSON.parse(body)
-    //       if (reply.playlist.startsWith('N/A')) 
-    //         return
-    //       playPlaylist(reply.playlist)
-    //    }
-    // })  
+//    toMipod('add \"Geschichten/Bobo Siebenschlaefer\"');
+    var arr = message.split(" ");
+    var rfid = arr[1];
+    console.log('rfidtag: '+ rfid)
+    if (rfid >1000000 && rfid < 10000000) {
+      rfidstring= "000" + rfid.toString(10);
+    }
+
+    //var req = playlistmapperurl+'getplaylist/'+arr[1];
+    var req = playlistmapperurl+'getplaylist/'+rfidstring;
+    console.log (req);
+    request(req, function (error, response, body) {
+       if (!error && response.statusCode == 200) {
+          console.log(body)  
+          reply = JSON.parse(body)
+          if (reply.playlist) {
+            if (reply.playlist.startsWith('N/A')) 
+              return
+            playPlaylist(reply.playlist)
+          }
+          if (reply.playpath) {
+            if (reply.playpath.startsWith('N/A')) 
+              return
+            playPlaylist(reply.playpath)
+
+          }
+       }
+    })  
   }
 
   else if (message.startsWith('I received')) {
