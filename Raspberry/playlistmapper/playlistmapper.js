@@ -47,6 +47,9 @@ function RespondToGetPlaylist(req, res) {
     }
     if ( typeof docs !== 'undefined' && docs ) {
       reply.playlist = docs.playlist
+      if (docs.playpath){
+        reply.playpath = docs.playpath
+      }
     }
     else {
       console.log ("RFID tag not found in DB. ")
