@@ -5,9 +5,6 @@
     - name: copy startup scripts to systemd folder
       shell: cp /home/pi/jukebox/Raspberry/startup/* /etc/systemd/system
       become: yes
-    - name: make service files executable  
-      shell: chmod u+rwx /etc/systemd/system/jukebox*
-      become: yes
     - name: enable jukebox_arduinogw to start at boot
       systemd:
         name: jukebox_arduinogw
@@ -16,7 +13,7 @@
     - name: start jukebox_arduinogw
       service:
         name: jukebox_arduinogw
-        enabled: true
+        state: started
         use: service
       become: yes
     - name: enable jukebox_mipod to start at boot
@@ -27,7 +24,7 @@
     - name: start jukebox_mipod
       service:
         name: jukebox_mipod
-        enabled: true
+        state: started
         use: service
       become: yes
     - name: enable jukebox_playlistmapper to start at boot
@@ -38,18 +35,7 @@
     - name: start jukebox_playlistmapper
       service:
         name: jukebox_playlistmapper
-        enabled: true
-        use: service
-      become: yes
-    - name: enable jukebox_relaiscontrol to start at boot
-      systemd:
-        name: jukebox_relaiscontrol
-        enabled: yes
-      become: yes
-    - name: start jukebox_relaiscontrol
-      service:
-        name: jukebox_relaiscontrol
-        enabled: true
+        state: started
         use: service
       become: yes
 ...
