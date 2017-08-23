@@ -8,6 +8,7 @@
         name: pi
         password: $6$Q1/azKlDyAZrQO6$NKOhziJTt4/4WHsS/DZKD0ZCL5GnYkV.hZLM.rrlOS5qhcxwk.JTVxB.A0o5BLugg5KavnJqKDy6PnE70v8t0.
         update_password: always 
+      become: yes
     - name: force apt to use IPv4
       lineinfile:
         dest: /etc/apt/apt.conf.d/99force-ipv4
@@ -52,7 +53,6 @@
         checksum: "sha256:c3058ba99f18bf8db7798a171a0709fc3e4b1c1f6d80f0673496ac325c9a1911"
     - name: extract node
       unarchive:
-        copy: no
         remote_src: yes
         src: /tmp/node-v7.9.0-linux-armv6l.tar.gz
         dest: /tmp

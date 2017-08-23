@@ -12,4 +12,9 @@
     - name: install modules for playlistmapper
       npm:
         path: /home/pi/jukebox/Raspberry/playlistmapper
+    - name: globally install mipod
+      npm:
+        global: yes
+        name: mipod
+      become: yes
 ... 
