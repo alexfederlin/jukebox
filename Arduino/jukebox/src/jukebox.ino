@@ -17,6 +17,15 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(A0, A1, A2, A3, A4, A5);
 int lcdBacklightPin = 9;
+#define LCDWIDTH 16
+#define LCDHEIGHT 2
+
+String pinnedString = "online";
+String scrollingString = "The Jukebox is";
+int pinnedRow = LCDHEIGHT / 2;
+int scrollingRow =  LCDHEIGHT / 2 - 1;
+int scrollingSpeed = 400;
+
 
 byte playicon[8] =
 {
@@ -178,6 +187,53 @@ void lcdDisplay(String str) {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(str);
+  lcd.autoscroll();
+}
+
+/* This procedure pins a given text in the center of a desired row while scrolling from right to left another given text on another desired row.
+    Parameters:
+    const String &pinnedText: pinned String
+    int pinnedRow: desired row for pinned String
+    const String &scrollingText: scrolling String
+    int scrollingRow: desired row for scrolling String
+    int v = scrolling speed expressed in milliseconds
+*/
+void pinAndScrollText(const String &pinnedText, int pinnedRow, const String &scrollingText, int scrollingRow, int v) {
+  if (pinnedRow == scrollingRow || pinnedRow < 0 || scrollingRow < 0 || pinnedRow >= LCDHEIGHT || scrollingRow >= LCDHEIGHT || pinnedText.length() > LCDWIDTH || v < 0) {
+    lcd.clear();
+    lcd.print("Error");
+    while (1);
+  }
+  int l = pinnedText.length();
+  lcd.setCursor(l % 2 == 0 ? LCDWIDTH / 2 - (l / 2) : LCDWIDTH / 2 - (l / 2) - 1, pinnedRow);
+  lcd.print(pinnedText);
+  int x = LCDWIDTH;
+  int n = scrollingText.length() + x;
+  int i = 0;
+  int j = 0;
+  while (n > 0) {
+    if (x > 0) {
+      x--;
+    }
+    lcd.setCursor(x, scrollingRow);
+    if (n > LCDWIDTH) {
+      j++;
+      i = (j > LCDWIDTH) ? i + 1 : 0;
+      lcd.print(scrollingText.substring(i, j));
+    } else {
+      i = i > 0 ? i + 1 : 0;
+      if (n == scrollingText.length()) {
+        i++;
+      }
+      lcd.print(scrollingText.substring(i, j));
+      lcd.setCursor(n - 1, scrollingRow);
+      lcd.print(' ');
+    }
+    n--;
+    if (n > 0) {
+      delay(v);
+    }
+  }
 }
 
 
@@ -192,7 +248,14 @@ void setup( ) {
     lcd.createChar(0, playicon);
     lcd.createChar(1, pauseicon);
     lcd.createChar(2, stopicon);
-    lcd.begin(16, 2);
+    lcd.begin(16, LCDHEIGHT);
+
+  pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
+
+  delay(2000);
+  lcd.clear();
+  lcd.print("Back");
+
     
 // initialize the Rotary Encoder
     // pins as an input
@@ -226,7 +289,7 @@ void setup( ) {
     Serial.setTimeout(200);
 
 // Print a message to the LCD.
-    lcdDisplay("Jukebox Online");
+//    lcdDisplay("Jukebox Online");
 //    lcd.setCursor(15,0);
 //    lcd.write((uint8_t)2);
 }
@@ -241,11 +304,20 @@ void loop( ) {
 //read from serial
     if (Serial.available() > 0) {
        // read the incoming byte:
-       incomingString = Serial.readString();
+       scrollingString = Serial.readString();
        // say what you got:
        Serial.print("I received: ");
-       Serial.println(incomingString);
-       lcdDisplay(incomingString);
+       Serial.println(scrollingString);
+       pinnedString = "Volume";
+       Serial.println("calling: pinAndScrollText");
+       Serial.println(pinnedString);
+       Serial.println(pinnedRow);
+       Serial.println(scrollingString);
+       Serial.println(scrollingRow);
+       Serial.println(scrollingSpeed);
+       pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
+
+//       lcdDisplay(incomingString);
     }
 
 // Rotary Encoder 
@@ -260,7 +332,7 @@ void loop( ) {
         }
         vol = VOLUME + count; 
         Serial.println(vol);
-        lcdDisplay(vol);
+        //lcdDisplay(vol);
         old_count = count;
         lcdRaise();
     }
@@ -278,7 +350,7 @@ void loop( ) {
     // turn LED on:    
     digitalWrite(ledPin, HIGH);
     Serial.println("CMD: previous");
-    lcdDisplay("prev");
+    //lcdDisplay("prev");
     sentstate = 1;
     lcdRaise();
   } 
@@ -296,7 +368,7 @@ void loop( ) {
     // turn LED on:    
     digitalWrite(ledPin, HIGH);  
     Serial.println("CMD: next");
-    lcdDisplay("next");
+    //lcdDisplay("next");
     sentstate = 1;
     lcdRaise();
   }
@@ -325,7 +397,7 @@ void loop( ) {
               unsigned long result = ((unsigned long int)data[1]<<24) + ((unsigned long int)data[2]<<16) + ((unsigned long int)data[3]<<8) + data[4];              
               Serial.print("RFID: ");
               Serial.println(result);
-              lcdDisplay(String(result));
+              //lcdDisplay(String(result));
               rfid.getData(lastdata,length);
               blocktimer = millis();
               lcdRaise();
