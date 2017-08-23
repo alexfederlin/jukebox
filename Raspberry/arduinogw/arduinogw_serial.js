@@ -58,6 +58,26 @@ client.on('ready', function() {
 client.on('system', function(name) {
   console.log("update", name);
 });
+
+client.on('system-player', function() {
+  console.log("player update.");
+  client.sendCommand(cmd("currentsong", []), function(err, msg){
+    if (err) throw err;
+    var track, artist, album, title;
+    if (msg == '') return;
+    var msgarray = msg.split('\n');
+    console.log(msgarray);
+    for (var j=0; j<msgarray.length; j++) {
+      if (msgarray[j].match('Title')) title=msgarray[j].split(':')[1];
+      if (msgarray[j].match('Track')) track=msgarray[j].split(':')[1];
+      if (msgarray[j].match('Artist')) artist=msgarray[j].split(':')[1];
+      if (msgarray[j].match('Album')) album=msgarray[j].split(':')[1];
+    }
+    var trackinfo = (track + "-"+artist+"-"+ album+"-"+title);
+    console.log("track info: "+trackinfo);
+    toArduino(trackinfo);
+  });
+})
  
 // Connect to the Arduino
 // This will start searching for an Arduino and connect to it once one is found
