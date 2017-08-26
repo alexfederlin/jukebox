@@ -1,9 +1,8 @@
 // This is the main controlling component of the Jukebox.
-// the actual playback of media files is handled by mpd, controlled through
-// a REST interface provided by mopidy.
+// the actual playback of media files is handled by mpd.
 // This process listens to the input coming from the Arduino on the serial connection.
-// The commands are partly passed on directly to mopidy, partly they are
-// pre processed before the required requests are sent to mopidy
+// The commands are partly passed on directly to mpd, partly they are
+// pre processed before the required requests are sent to mpd
 
 // there are three messages that can come from the Arduino
 // 1. button presses
@@ -11,14 +10,14 @@
 //    - prev
 //    - next
 //    - playpause
-//    The first two can be put through to the mipod server. Playpause first
+//    The first two can be put through to the mpd server. Playpause first
 //    needs to determine the current status of playback (play, stop, pause)
 //    and will then send either 
 //    - pause (if current status is play) 
 //    - play (if current status is anything else)
 // 2. Volume messages
 //    volume messages are sent by the Arduino the form of volume/<value>
-//    This is the format expected by mipod and can be sent straight on
+//    This is the format expected by mpd and can be sent straight on
 // 3. RFID reads
 //    If an RFID tag is scanned the message will look like: "RFID: <rfidTag>"
 //    First of all, we need to figure out which playlist is connected to this
@@ -28,7 +27,6 @@
 
 // Requirements:
 // - mpd must be running and configured with playlists
-// - mopidy must be running
 // - playlistmapper must be running and configured to translate RFID tags to playlists present in mpd
 
 
@@ -43,7 +41,6 @@ var arduino = new SerialPort("/dev/ttyACM0", {
 });
 var request = require('request');
 
-const mipodurl = 'http://localhost:10081/'
 const playlistmapperurl = 'http://localhost:4000/'
 
 var mpd = require('mpd'),
@@ -61,42 +58,32 @@ client.on('system', function(name) {
 
 client.on('system-player', function() {
   console.log("player update.");
-  client.sendCommand(cmd("currentsong", []), function(err, msg){
+  client.sendCommand("status", function(err, msg){
     if (err) throw err;
-    var track, artist, album, title;
+    var position, playlistlength;
     if (msg == '') return;
     var msgarray = msg.split('\n');
-    console.log(msgarray);
+//    console.log(msgarray);
     for (var j=0; j<msgarray.length; j++) {
-      if (msgarray[j].match('Title')) title=msgarray[j].split(':')[1];
-      if (msgarray[j].match('Track')) track=msgarray[j].split(':')[1];
-      if (msgarray[j].match('Artist')) artist=msgarray[j].split(':')[1];
-      if (msgarray[j].match('Album')) album=msgarray[j].split(':')[1];
+      if (msgarray[j].match('song:')) position=msgarray[j].split(':')[1];
+      if (msgarray[j].match('playlistlength:')) playlistlength=msgarray[j].split(':')[1];
     }
-    var trackinfo = (track + "-"+artist+"-"+ album+"-"+title);
+    var trackinfo = (position + " /" + playlistlength);
     console.log("track info: "+trackinfo);
     toArduino(trackinfo);
   });
 })
- 
-// Connect to the Arduino
-// This will start searching for an Arduino and connect to it once one is found
- 
-// function toMipod(message) {
-//   console.log('sending message to mipod '+message+'.')
-//   request(mipodurl+message, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//         console.log(body) 
-//      }
-//   })
 
-// }
+//add leading 0's to RFID tag
+function pad(n, width=11, z=0) {
+  return (String(z).repeat(width) + String(n)).slice(String(n).length)
+} 
 
-function toMipod(message) {
-  console.log('sending message to mipod '+message+'.');
+function toMpd(message) {
+  console.log('sending message to mpd: '+message);
   client.sendCommand(cmd(message, []), function (err, msg) {
     if (err) throw err;
-    console.log(msg);
+//    console.log("response from mpd: "+ msg);
   });
 };
 
@@ -117,36 +104,47 @@ arduino.on('disconnect', function() {
   console.log('Arduino serial connection closed.');
 });
 
-
+// This is where input from Arduino is handled
+// input can be:
+// - playpause
+// - CMD: next
+// - CMD: prev
+// - CMD: volume
+// - RFID:  scan
+// - I reveived: echo of data sent to Arduino to display
 arduino.on('data', function(message) {
-  console.log('Data received: ' + message);
+  console.log('Data from Arduino: ' + message);
 
   // playpause toggle depends on current playback status
   if (message.startsWith('playpause')) {
     console.log('querying status')
-    request(mipodurl+'status', function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        stat = JSON.parse(body)
-        message = (stat.state.startsWith('play')) ? 'pause' : 'play';
-        console.log(stat.state, " --> ", message) 
-        toArduino(message);
-        toMipod(message);
+    client.sendCommand("status", function(error,response){
+      if (error){
+        console.log(error);
+      return;
       }
-    })  
+      console.log(response);
+      if (response.indexOf("state: play") > -1) {
+        client.sendCommand("pause 1", reportStatus);
+        console.log("pausing playback");
+        toArduino("pause");
+      }
+      else {
+        client.sendCommand("play", reportStatus);
+        console.log("resuming playback");
+        toArduino("play");
+      }
+    });
   }
 
   // RFID needs to be translated to name of playlist by playlistmapper
   else if (message.startsWith('RFID')) {
-//    toMipod('add \"Geschichten/Bobo Siebenschlaefer\"');
     var arr = message.split(" ");
-    var rfid = arr[1];
+    var rfid = pad(arr[1]);
     console.log('rfidtag: '+ rfid)
-    if (rfid >1000000 && rfid < 10000000) {
-      rfidstring= "000" + rfid.toString(10);
-    }
 
     //var req = playlistmapperurl+'getplaylist/'+arr[1];
-    var req = playlistmapperurl+'getplaylist/'+rfidstring;
+    var req = playlistmapperurl+'getplaylist/'+rfid;
     console.log (req);
     request(req, function (error, response, body) {
        if (!error && response.statusCode == 200) {
@@ -171,34 +169,33 @@ arduino.on('data', function(message) {
     console.log ("feedback from Arduino received");
   }
 
-  // everything else can be passed right on to mopidy
+  // everything else (volume, prev, next) can be passed right on to mpd
   else if (message.startsWith('CMD:')) {
     var m = message.replace(/^CMD: /, '')
-    console.log ("sending to mipod: ", m)
-    toMipod(m);
+    console.log ("sending to mpd: ", m)
+    toMpd(m);
   }
 });
 
 
 
 function playPlaylist(playlist){
-  url = mipodurl+"play";
-  requestData = { "entry" : playlist };
-  
-  console.log("start playing playlist "+playlist);
-  
-  request({
-      url: url,
-      method: "POST",
-      json: requestData
-    }, reportStatus);
 
+  var command="add \""+playlist+"\"";
+  toMpd("clear");
+  toMpd(command);
+  toMpd("play");
+//  client.sendCommand("clear");
+//  client.sendCommand(command, reportStatus);
+//  client.sendCommand("play");
+  
+//  console.log("sending command "+command);
 }
 
-function reportStatus (error, response, body) {
+function reportStatus (error, response) {
     if (error){
       console.log(error);
       return;
     }
-    console.log("starting to play: "+response.statusCode);
+    console.log("status: "+response);
 }
