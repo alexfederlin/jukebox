@@ -250,7 +250,7 @@ void setup( ) {
     lcd.createChar(2, stopicon);
     lcd.begin(16, LCDHEIGHT);
 
-  pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
+  //pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
 
   delay(2000);
   lcd.clear();
@@ -289,7 +289,7 @@ void setup( ) {
     Serial.setTimeout(200);
 
 // Print a message to the LCD.
-//    lcdDisplay("Jukebox Online");
+    lcdDisplay("Jukebox Online");
 //    lcd.setCursor(15,0);
 //    lcd.write((uint8_t)2);
 }
@@ -308,16 +308,16 @@ void loop( ) {
        // say what you got:
        Serial.print("I received: ");
        Serial.println(scrollingString);
-       pinnedString = "Volume";
-       Serial.println("calling: pinAndScrollText");
-       Serial.println(pinnedString);
-       Serial.println(pinnedRow);
-       Serial.println(scrollingString);
-       Serial.println(scrollingRow);
-       Serial.println(scrollingSpeed);
-       pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
+//       pinnedString = "Volume";
+//       Serial.println("calling: pinAndScrollText");
+//       Serial.println(pinnedString);
+//       Serial.println(pinnedRow);
+//       Serial.println(scrollingString);
+//       Serial.println(scrollingRow);
+//       Serial.println(scrollingSpeed);
+//       pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
 
-//       lcdDisplay(incomingString);
+       lcdDisplay(incomingString);
     }
 
 // Rotary Encoder 
