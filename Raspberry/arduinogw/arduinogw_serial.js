@@ -82,14 +82,14 @@ function pad(n, width=11, z=0) {
 function toMpd(message) {
   console.log('sending message to mpd: '+message);
   client.sendCommand(cmd(message, []), function (err, msg) {
-    if (err) throw err;
+    if (err) console.log(err);
 //    console.log("response from mpd: "+ msg);
   });
 };
 
 function toArduino(message) {
   console.log('sending message to Arduino '+message+'.');
-  arduino.write(message);
+  arduino.write(message+"\r");
 }
 
 
@@ -165,7 +165,7 @@ arduino.on('data', function(message) {
     })  
   }
 
-  else if (message.startsWith('I received')) {
+  else if (message.startsWith('Arduino received')) {
     console.log ("feedback from Arduino received");
   }
 
