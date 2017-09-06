@@ -86,7 +86,7 @@
         opts: defaults,noatime
         path: /var/lib/mpd/music
         state: mounted
-        src: 'PARTUUID=ee397c53-05'
+        src: 'PARTUUID=0c47fa80-05'
       become: yes
     - name: update mpd
       command: mpc update
