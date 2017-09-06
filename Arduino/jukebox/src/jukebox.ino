@@ -187,8 +187,35 @@ void lcdDisplay(String str) {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(str);
-  lcd.autoscroll();
 }
+
+
+// read from Serialport until a CR is found
+// see https://hackingmajenkoblog.wordpress.com/2016/02/01/reading-serial-on-the-arduino/
+int readline(int readch, char *buffer, int len)
+{
+  static int pos = 0;
+  int rpos;
+
+  if (readch > 0) {
+    switch (readch) {
+      case '\n': // Ignore new-lines
+        break;
+      case '\r': // Return on CR
+        rpos = pos;
+        pos = 0;  // Reset position index ready for next time
+        return rpos;
+      default:
+        if (pos < len-1) {
+          buffer[pos++] = readch;
+          buffer[pos] = 0;
+        }
+    }
+  }
+  // No end of line has been found, so return -1.
+  return -1;
+}
+
 
 /* This procedure pins a given text in the center of a desired row while scrolling from right to left another given text on another desired row.
     Parameters:
@@ -252,9 +279,9 @@ void setup( ) {
 
   //pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
 
-  delay(2000);
+//  delay(2000);
   lcd.clear();
-  lcd.print("Back");
+//  lcd.print("Back");
 
     
 // initialize the Rotary Encoder
@@ -302,23 +329,14 @@ void setup( ) {
 void loop( ) {
 
 //read from serial
-    if (Serial.available() > 0) {
-       // read the incoming byte:
-       scrollingString = Serial.readString();
-       // say what you got:
-       Serial.print("I received: ");
-       Serial.println(scrollingString);
-//       pinnedString = "Volume";
-//       Serial.println("calling: pinAndScrollText");
-//       Serial.println(pinnedString);
-//       Serial.println(pinnedRow);
-//       Serial.println(scrollingString);
-//       Serial.println(scrollingRow);
-//       Serial.println(scrollingSpeed);
-//       pinAndScrollText(pinnedString, pinnedRow, scrollingString, scrollingRow, scrollingSpeed);
 
-       lcdDisplay(incomingString);
-    }
+  static char buffer[80];
+  if (readline(Serial.read(), buffer, 80) > 0) {
+    Serial.print("Data received by Arduino: >");
+    Serial.print(buffer);
+    Serial.println("<");
+    lcdDisplay(buffer);
+  }
 
 // Rotary Encoder 
     if( old_count != count ) {
@@ -335,6 +353,7 @@ void loop( ) {
         //lcdDisplay(vol);
         old_count = count;
         lcdRaise();
+        lcdDisplay ("Lautstaerke: " + String(count));
     }
 
 //Pushbuttons
@@ -350,7 +369,7 @@ void loop( ) {
     // turn LED on:    
     digitalWrite(ledPin, HIGH);
     Serial.println("CMD: previous");
-    //lcdDisplay("prev");
+    lcdDisplay("previous");
     sentstate = 1;
     lcdRaise();
   } 
@@ -368,7 +387,7 @@ void loop( ) {
     // turn LED on:    
     digitalWrite(ledPin, HIGH);  
     Serial.println("CMD: next");
-    //lcdDisplay("next");
+    lcdDisplay("next");
     sentstate = 1;
     lcdRaise();
   }
