@@ -1,0 +1,16 @@
+{
+  "name": "onlinepopulator",
+  "version": "1.0.0",
+  "description": "Online Populator for RFID Cards Database",
+  "main": "onlinepopulator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexander Federlin <alexander@federlin.de> (www.federlin.de)",
+  "license": "ISC",
+  "dependencies": {
+    "nedb": "^1.8.0",
+    "node-dir": "^0.1.17",
+    "sort-array": "^2.0.0"
+  }
+}

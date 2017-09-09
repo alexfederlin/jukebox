@@ -10,7 +10,7 @@
 //   will fail.
 const path = require('path');
 
-const datastore = '/home/alex/Daten/Projekte/Development/jukebox/DBpopulator/database.db';
+const datastore = '/home/alex/Daten/Projekte/Development/jukebox/Provisioning/DBpopulator/database.db';
 
 var playlist = process.argv[2]
 
