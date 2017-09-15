@@ -49,13 +49,20 @@ So I scrapped that idea, or rather, I extended it.
 - Proto Shield V5 Prototyping Board für Arduino Uno - 6 EUR - ebay
 - Display (16x2 Zeichen + I2c Modul) - 7 EUR - ebay
 - Relais 2-Channel 5V Relais with Optokoppler - 5 EUR - ebay
+- Wifi Stick (Edimax EW-7811Un) - 7 EUR Amazon
 
 ### Price
 So, if you tally this up, not exactly cheap. 
 Bare bones 75 EUR
-Extensions 41 EUR
-Total: 116 EUR
+Extensions 48 EUR
+Total: 123 EUR
 
 And this is without the Raspi, speakers and amp, since I had all of this still lying around...
 
 Add to that maybe 100 hours of research, design, building, programming... But the learning experience was priceless :-)
+
+## Hardware
+### Box
+### Power
+### Arduino
+
