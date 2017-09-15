@@ -71,13 +71,25 @@ A basic wooden box from the hardware store (Bauhaus).  In each corner I glued so
 On the sides of the box are holes, so you can carry it (if you use it as an actual storage box. They're handy for ventilation, but you'll want to cover them to keep out sticky things and pokey fingers. I cut up a beat up steel mesh waste paper basket from Ikea and upcycled the mesh for this purpose. I used a staple gun to fix it to the inside of the box.
 
 #### Front Panel
-I had the plywood for the front cut to size in the hardware store. If you have a circular saw, you can probably do it yourself, but with a jigsaw - forget it. The front I set into the box and is screwed into the slats in the corners.
+I had the plywood for the front cut to size in the hardware store. If you have a buzz saw, you can probably do it yourself, but with a jigsaw - forget it. The front I set into the box and is screwed into the slats in the corners.
 Before you do that, all the components have to be fixed to it of course. The layout of the front panel you can find as a draw.io sketch in the Documentation folder of this repo.
 The front panel holds the speakers, amp, display, 3 arcade buttons (forward, back, play/pause), a rotary encoder (volume), the RFID reader along with its Antenna and of course the Arduino.
 Having all these components together on the front panel has the advantage that there are only 4 cables connecting the front panel and the back plane: 
 - USB cable (Arduino - Raspi)
 - Audio cable (Amp - Raspi)
 - Power for the Amp (throught the Relais)
+
+##### Tools and manufacturing
+The front panel requires a number of holes to be drilled and cut out. Tools used were
+- drill 3.5 mm
+- sink bit 3mm to get the screws flush with the wood
+- Forstner drill 30 mm for Arcade buttons
+- Holesaw 45mm for speakers
+- large drill and jigsaw for the display cutout
+- industrial rotary tool (Proxxon IBS) for removing some material on the back side to fit the display
+
+When cutting out the holes for the speakers - cut the big holes first, before you drill the screw holes. Once you have the big holes in place, put the speakers on there and mark where the screw holes need to go. I did it all at once just with measurements and of course my speakers now sit off-center on the holes...
+
 
 ### Power
 ### Arduino
