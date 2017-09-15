@@ -66,3 +66,9 @@ Add to that maybe 100 hours of research, design, building, programming... But th
 ### Power
 ### Arduino
 
+## Software
+### Overview
+#### Arduino Sketch
+#### Arduino Gateway
+#### Playlist mapper
+
