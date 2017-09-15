@@ -1,6 +1,7 @@
 # Kid's Jukebox
 Here you will find all resources I used to build my RFID jukebox project.
 
+## Inspiration
 The idea is not new. Instead of having CDs scratched in no time or paying ridiculous amounts of money for commercial RFID story players (has anyone ever bought a tonies? Really?), I decided to roll my own.
 
 There are several good ideas for building RFID Jukeboxes out there:
@@ -9,12 +10,13 @@ They range from minimal viable products:
 https://mwiedemeyer.de/blog/post/Raspberry-Pi-Jukebox-fur-Kinder
 
 To quite sophisticated ones.
-http://www.forum-raspberrypi.de/Thread-projekt-jukebox4kids-jukebox-fuer-kinder
-http://www.forum-raspberrypi.de/Thread-projekt-jukebox4kids-jukebox-fuer-kinder?pid=191055#pid191055
-http://www.forum-raspberrypi.de/Thread-projekt-rfid-media-player
+- http://www.forum-raspberrypi.de/Thread-projekt-jukebox4kids-jukebox-fuer-kinder
+- http://www.forum-raspberrypi.de/Thread-projekt-jukebox4kids-jukebox-fuer-kinder?pid=191055#pid191055
+- http://www.forum-raspberrypi.de/Thread-projekt-rfid-media-player
 
+## Parts
 I decided the minimum for me would be the following in terms of hardware (all prices indicated are approximately what I paid in 2017, including shipping where applicable)
-
+### Basics
 - Box (Zeller-Holzkisten 30x20x15) - 6,50 EUR - hardware store
     - covers for the sides (I used metal mesh from a beat up IKEA waste paper basket)
     - front (7mm plywood from the hardware store) 
@@ -28,8 +30,7 @@ I decided the minimum for me would be the following in terms of hardware (all pr
 - 1 rotary encoder (KY-040 incl. nut) - 3 EUR incl shipping - ebay
 - Ground loop insulator (AUKEY) - 10 EUR - Amazon https://www.amazon.de/gp/product/B01LX0H29W
 
-Also, some small parts
-
+### Small parts
 - Ethernet connector (0.3m RJ45 Plug to Jack Panel Mount) - 4 EUR - ebay 
 - USB cable (A to L shaped B connector) - 4 EUR - ebay
 - ICE Socket C14 Inlet with switch and fuse - 4 EUR - ebay
@@ -43,13 +44,13 @@ However, what fun would it be without an Arduino?
 
 So I scrapped that idea, or rather, I extended it.
 
-So this is what I actually used (in addition to the above):
-
+### Extension
 - Arduino Uno (used to control RFID reader, Buttons, Rotary dial, eventually an LCD) 23 EUR - Amazon
 - Proto Shield V5 Prototyping Board für Arduino Uno - 6 EUR - ebay
 - Display (16x2 Zeichen + I2c Modul) - 7 EUR - ebay
 - Relais 2-Channel 5V Relais with Optokoppler - 5 EUR - ebay
 
+### Price
 So, if you tally this up, not exactly cheap. 
 Bare bones 75 EUR
 Extensions 41 EUR
