@@ -40,6 +40,7 @@ I decided the minimum for me would be the following in terms of hardware (all pr
 - Some M3 screws and nuts - 9 EUR - ebay
 - Resistors, capacitors - 2 EUR - ebay
 - Jumper cable (some shorter, some up to 30 or 40 cm)
+- heat shrinking tube
 
 No arduino, no display.
 
@@ -73,7 +74,16 @@ On the sides of the box are holes, so you can carry it (if you use it as an actu
 #### Front Panel
 I had the plywood for the front cut to size in the hardware store. If you have a buzz saw, you can probably do it yourself, but with a jigsaw - forget it. The front I set into the box and is screwed into the slats in the corners.
 Before you do that, all the components have to be fixed to it of course. The layout of the front panel you can find as a draw.io sketch in the Documentation folder of this repo.
-The front panel holds the speakers, amp, display, 3 arcade buttons (forward, back, play/pause), a rotary encoder (volume), the RFID reader along with its Antenna and of course the Arduino.
+
+The front panel holds 
+- the speakers
+- amp
+- display
+- 3 arcade buttons (forward, back, play/pause)
+- a rotary encoder (volume)
+- the RFID reader along with its Antenna 
+- Arduino.
+
 Having all these components together on the front panel has the advantage that there are only 4 cables connecting the front panel and the back plane: 
 - USB cable (Arduino - Raspi)
 - Audio cable (Amp - Raspi)
@@ -90,8 +100,27 @@ The front panel requires a number of holes to be drilled and cut out. Tools used
 
 When cutting out the holes for the speakers - cut the big holes first, before you drill the screw holes. Once you have the big holes in place, put the speakers on there and mark where the screw holes need to go. I did it all at once just with measurements and of course my speakers now sit off-center on the holes...
 
+#### Back plane
+As back plane I used another piece of plywood. This one I cut myslf, because you can't see it anyway, so it's ok if the edges are a bit squiggly. I glued some scrap pieces of plywood to the bottom of the box so it's raised up a bit. I put in some screws at an angle that go into the corner slats to hold it in place.
+
+The backplane only holds
+- the Raspberry
+- power supply
+- power relais
+
+I used the lower snap-in half of a Raspi case to hold the Rasperry. This is quite nice because only the case is screwed to the back plane and the Raspi itself is easily removed. That makes e.g. changing the SD card much easier.
+The other components are just strapped to the plywood using cable ties threaded through holes I drilled into the plywood.
+
+There is also a cut out for the only components that are actually attached to the box itself:
+- the C14 power inlet
+- the RJ45 panel mount
+- the power button i didn't get around to installing
 
 ### Power
+The power setup is not quite finished. The inital plan was to have a power button on the back which shuts down the raspi and powers off the amp with a short press. Powering on the raspi would have to be done by physically cutting the power.
+I even have the script in the repo which would have to run on the raspi, watching for the button to be pushed. But, alas, I couldn't be bothered.
+I still wired the amp to the relais (which is controlled by the Raspi), so in theory I could turn off the amp if no music is playing for a while...
+
 ### Arduino
 
 ## Software
