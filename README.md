@@ -1,6 +1,9 @@
 # Kid's Jukebox
 Here you will find all resources I used to build my RFID jukebox project.
 
+## TL;DR
+It's a box which reads an RFID card, translates it into a folder on the Raspi's SD Card and instructing mpd to play it. You also have buttons and a knob.
+
 ## Inspiration
 The idea is not new. Instead of having CDs scratched in no time or paying ridiculous amounts of money for commercial RFID story players (has anyone ever bought a tonies? Really?), I decided to roll my own.
 
@@ -62,13 +65,36 @@ And this is without the Raspi, speakers and amp, since I had all of this still l
 Add to that maybe 100 hours of research, design, building, programming... But the learning experience was priceless :-)
 
 ## Hardware
+Putting together the hardware components was a combination of woodwor and electronics. With this you have to choose the order of what you're doing wisely. Else you end up with a lot of wood shavings on your electronics parts...
 ### Box
+A basic wooden box from the hardware store (Bauhaus).  In each corner I glued some 1x2cm wooden slates. These were cut to length so that the 7mm plywood front ended up flush with the rim of the box. 
+On the sides of the box are holes, so you can carry it (if you use it as an actual storage box. They're handy for ventilation, but you'll want to cover them to keep out sticky things and pokey fingers. I cut up a beat up steel mesh waste paper basket from Ikea and upcycled the mesh for this purpose. I used a staple gun to fix it to the inside of the box.
+
+#### Front Panel
+I had the plywood for the front cut to size in the hardware store. If you have a circular saw, you can probably do it yourself, but with a jigsaw - forget it. The front I set into the box and is screwed into the slats in the corners.
+Before you do that, all the components have to be fixed to it of course. The layout of the front panel you can find as a draw.io sketch in the Documentation folder of this repo.
+The front panel holds the speakers, amp, display, 3 arcade buttons (forward, back, play/pause), a rotary encoder (volume), the RFID reader along with its Antenna and of course the Arduino.
+Having all these components together on the front panel has the advantage that there are only 4 cables connecting the front panel and the back plane: 
+- USB cable (Arduino - Raspi)
+- Audio cable (Amp - Raspi)
+- Power for the Amp (throught the Relais)
+
 ### Power
 ### Arduino
 
 ## Software
 ### Overview
+#### General Architecture
 #### Arduino Sketch
 #### Arduino Gateway
 #### Playlist mapper
+### Arduino specifics
+
+## Deployment
+### Ansible Playbooks
+
+## Operations
+
+## Provisioning
+
 
