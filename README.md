@@ -1,6 +1,7 @@
 # Kid's Jukebox
 Here you will find all resources I used to build my RFID jukebox project.
 ![Jukebox](https://lh3.googleusercontent.com/pv-Fiz7H5_kjdsXBR3EBHR22OiZAHizz9FE4_JCX-vNBZOEodPO9EkLWWmELTjNF7ljwb6dfjRhJmVQDA4LtR-4do3H9sG23VDzxw5u7QxAFE5a1CvwSMdHjk2XcNW-4wBEnOKUSLL8)
+
 ## TL;DR
 It's a box which reads an RFID card, translates it into a folder on the Raspi's SD Card and instructing mpd to play it. You also have a display, buttons and a knob.
 
@@ -94,6 +95,7 @@ Having all these components together on the front panel has the advantage that t
 
 ##### Tools and manufacturing
 ![Front panel](https://lh3.googleusercontent.com/ICs7BttuntgUGOqpm5ZJE6vntgah_R_bq6Wdfw8MIzl7-MiIOEBZ8M3p1Dhs1vWdPFCP_lArL4-pBr_GL3evcE0QFpWZRjURkGzgFbCpc6Vbd_jJyghNVaaNc-jNZU0l4YHQbK2RXGk)
+
 The front panel requires a number of holes to be drilled and cut out. Tools used were
 - drill 3.5 mm
 - sink bit 3mm to get the screws flush with the wood
@@ -101,6 +103,8 @@ The front panel requires a number of holes to be drilled and cut out. Tools used
 - Holesaw 45mm for speakers
 - large drill and jigsaw for the display cutout
 - industrial rotary tool (Proxxon IBS) for removing some material on the back side to fit the display
+
+![shaving on the back](https://lh3.googleusercontent.com/sm8uvPnlQxJuIS9blaYCCekb4u3A3xpcemDQsq1SRiyrkjAunXCSQnofNtau-Sik6sESNWvMXzMVtEgrCRduQNQlQXTalAmE-TzPBqvdFAB6hlb6iZCyx6obknlxpI0CEYRL9-uFbKs)
 
 When cutting out the holes for the speakers - cut the big holes first, before you drill the screw holes. Once you have the big holes in place, put the speakers on there and mark where the screw holes need to go. I did it all at once just with measurements and of course my speakers now sit off-center on the holes...
 
