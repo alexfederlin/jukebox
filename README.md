@@ -133,6 +133,8 @@ There is also a cut out for the only components that are actually attached to th
 - the RJ45 panel mount
 - the power button i didn't get around to installing
 
+![Back](https://lh3.googleusercontent.com/X5npm117mHoMTw28rSq9oKQqzP-JSwatnUfUdwawmgIpjmYLjMSfgGo1GOsHT9O4Z7YbLp2C1VEypHq8CELOCQyqvA9RCxNeEMLUmUcPg9Q7ZtgPie-SJl9oi3KQFNcHorJeXODr7bY)
+
 ### Power
 The power setup is not quite finished. The inital plan was to have a power button on the back which shuts down the raspi and powers off the amp with a short press. Powering on the raspi would have to be done by physically cutting the power.
 I even have the script in the repo which would have to run on the raspi, watching for the button to be pushed. But, alas, I couldn't be bothered.
