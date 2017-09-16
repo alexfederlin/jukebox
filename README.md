@@ -20,7 +20,6 @@ https://mwiedemeyer.de/blog/post/Raspberry-Pi-Jukebox-fur-Kinder
 
 To quite sophisticated ones.
 - http://www.forum-raspberrypi.de/Thread-projekt-jukebox4kids-jukebox-fuer-kinder
-- http://www.forum-raspberrypi.de/Thread-projekt-jukebox4kids-jukebox-fuer-kinder?pid=191055#pid191055
 - http://www.forum-raspberrypi.de/Thread-projekt-rfid-media-player
 
 ## Parts
