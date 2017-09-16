@@ -3,6 +3,8 @@ Here you will find all resources I used to build my RFID jukebox project.
 
 ## TL;DR
 It's a box which reads an RFID card, translates it into a folder on the Raspi's SD Card and instructing mpd to play it. You also have buttons and a knob.
+There are complete instructions including building plans for building the hardware below. 
+SW is written in bad node.js. All in the repo and installable via Ansible playbooks.
 
 ## Inspiration
 The idea is not new. Instead of having CDs scratched in no time or paying ridiculous amounts of money for commercial RFID story players (has anyone ever bought a tonies? Really?), I decided to roll my own.
