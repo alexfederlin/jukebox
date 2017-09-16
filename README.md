@@ -136,7 +136,36 @@ The power setup is not quite finished. The inital plan was to have a power butto
 I even have the script in the repo which would have to run on the raspi, watching for the button to be pushed. But, alas, I couldn't be bothered.
 I still wired the amp to the relais (which is controlled by the Raspi), so in theory I could turn off the amp if no music is playing for a while...
 
-### Arduino
+### Electronics
+
+Now that we got all of that boring woodwork out of the way, now for the fun part...
+
+#### Arduino
+
+![Fritzing](https://github.com/alexfederlin/jukebox/raw/master/Documentation/Arduino_prototype_board_fritzing_Steckplatine.jpg)
+
+There are a couple of things to connect to the Arduino:
+- 3 Buttons
+- a KY40 Rotary Encoder
+- a display
+- and of course the RFID reader
+
+I use the prototyping board that you can plug on top of the Arduino to solder all my circuitry. It's all a bit small and it's not pretty, but it is absolutely doable (I'm not really a wizard with the soldering iron).And it's probably less prone to cables coming loose than breadbords - which you also would have to glue to the front panel somehow...
+
+![Arduino](https://lh3.googleusercontent.com/BZ3ndRm3Ud84WDgVp0vnmiLSXXV-fyj5NB5dJFsO7I66qA1438y6bSPvf6Nuu5o7kDE5jOhMNqn1dU5-5STs3HTOYCx_q7q0u6wV7F6fxrKEU8F3op15dqGql2z3z5UgXcvd4JIu-pc)
+
+##### Buttons
+I decided to go with a hardware debounce for the buttons. For this I used a 1uF capacitor and 1 10kOhm resistor. Why do it in hardware? Because I can. In retrospect, it probably would have been easier to do it with less hardware elements for space reasons, but hey, it works.
+
+##### Rotary Encoder
+I had a bit of a hard time with the rotary encoder for adjusting the volume. I found out that there are different hardware versions available. Some have a thread and a nut with which you can fix them to a panel. Some don't...
+I also tried HW debouncing, but that didn't work. I tried a gazillion libraries that all claim to do SW debouncing for rotary encoders... luckily I found one that worked. More on that in the SW section.
+
+##### Display
+The display is a fun thing to play with. In the final product it's of less use than I thought. I tried scrolling text, but it looks horrible. So you're really confined to 2x16 characters. And putting some sensible stuff on there is more effort than I was prepared to spend to this point.
+All the pins needed to drive the display are connected to the Arduino using long jumper wires. I soldered a pin strip to the display board to be able to just plug them on.
+
+
 
 ## Software
 ### Overview
