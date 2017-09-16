@@ -1,6 +1,6 @@
 # Kid's Jukebox
 Here you will find all resources I used to build my RFID jukebox project.
-
+![Jukebox](https://photos.app.goo.gl/RNE70muMzRr7BsgB3)
 ## TL;DR
 It's a box which reads an RFID card, translates it into a folder on the Raspi's SD Card and instructing mpd to play it. You also have buttons and a knob.
 There are complete instructions including building plans for building the hardware below. 
