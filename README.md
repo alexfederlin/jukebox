@@ -93,6 +93,7 @@ Having all these components together on the front panel has the advantage that t
 - Power for the Amp (throught the Relais)
 
 ##### Tools and manufacturing
+![Front panel](https://lh3.googleusercontent.com/ICs7BttuntgUGOqpm5ZJE6vntgah_R_bq6Wdfw8MIzl7-MiIOEBZ8M3p1Dhs1vWdPFCP_lArL4-pBr_GL3evcE0QFpWZRjURkGzgFbCpc6Vbd_jJyghNVaaNc-jNZU0l4YHQbK2RXGk)
 The front panel requires a number of holes to be drilled and cut out. Tools used were
 - drill 3.5 mm
 - sink bit 3mm to get the screws flush with the wood
