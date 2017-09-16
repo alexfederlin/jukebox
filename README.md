@@ -113,8 +113,9 @@ The front panel requires a number of holes to be drilled and cut out. Tools used
 When cutting out the holes for the speakers - cut the big holes first, before you drill the screw holes. Once you have the big holes in place, put the speakers on there and mark where the screw holes need to go. I did it all at once just with measurements and of course my speakers now sit off-center on the holes...
 
 #### Back plane
-As back plane I used another piece of plywood. This one I cut myslf, because you can't see it anyway, so it's ok if the edges are a bit squiggly. I glued some scrap pieces of plywood to the bottom of the box so it's raised up a bit. I put in some screws at an angle that go into the corner slats to hold it in place.
+As back plane I used another piece of plywood. This one I cut myself, because you can't see it anyway, so it's ok if the edges are a bit squiggly. I glued some scrap pieces of plywood to the bottom of the box so it's raised up a bit. I put in some screws at an angle that go into the corner slats to hold it in place.
 
+The picture below was taken when I tried to figure out what goes where on the backplane. Nevermind the funny cutout in the upper part. I was practicing for the display cutout on the front...
 ![Backplane intermediate](https://lh3.googleusercontent.com/HYZRa7jl0EmlxhneIKTELqHd_iMV9qOtNZCo-W0w6oK2wljI6KB8HYewQrOslvmv-UHOn5q2DkL2MiKuu5QUrLFFTVN-esSuDVbFTCRbSzZQ2eYnbDCnmPXUIOSu6kCEvSykt8D66rg)
 
 The backplane only holds
