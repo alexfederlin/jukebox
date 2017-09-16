@@ -139,8 +139,11 @@ I still wired the amp to the relais (which is controlled by the Raspi), so in th
 ### Electronics
 
 Now that we got all of that boring woodwork out of the way, now for the fun part...
+![Full](https://lh3.googleusercontent.com/nlyr2uLGEFCEavF0wD4c7s7EIrI-ZpbU7ybi2r2uZ68XDOGzAylaUaS8_jRFzidz0GKXOWT7dI9ZYtOeP7kX_L5J2CsIjEZIfIcffQ73ek_WuajmsANeBRSzVNUAIGpjfq2VSORZiT8)
 
 #### Arduino
+
+There is a Fritzing sketch in the Documentation folder of this project...
 
 ![Fritzing](https://github.com/alexfederlin/jukebox/raw/master/Documentation/Arduino_prototype_board_fritzing_Steckplatine.jpg)
 
@@ -155,7 +158,7 @@ I use the prototyping board that you can plug on top of the Arduino to solder al
 ![Arduino](https://lh3.googleusercontent.com/BZ3ndRm3Ud84WDgVp0vnmiLSXXV-fyj5NB5dJFsO7I66qA1438y6bSPvf6Nuu5o7kDE5jOhMNqn1dU5-5STs3HTOYCx_q7q0u6wV7F6fxrKEU8F3op15dqGql2z3z5UgXcvd4JIu-pc)
 
 ##### Buttons
-I decided to go with a hardware debounce for the buttons. For this I used a 1uF capacitor and 1 10kOhm resistor. Why do it in hardware? Because I can. In retrospect, it probably would have been easier to do it with less hardware elements for space reasons, but hey, it works.
+I decided to go with a hardware debounce for the buttons. For this I used a 1uF capacitor and a 10kOhm resistor. Why do it in hardware? Because I can. In retrospect, it probably would have been easier to do it with less hardware elements for space reasons, but hey, it works.
 
 ##### Rotary Encoder
 I had a bit of a hard time with the rotary encoder for adjusting the volume. I found out that there are different hardware versions available. Some have a thread and a nut with which you can fix them to a panel. Some don't...
@@ -164,6 +167,11 @@ I also tried HW debouncing, but that didn't work. I tried a gazillion libraries 
 ##### Display
 The display is a fun thing to play with. In the final product it's of less use than I thought. I tried scrolling text, but it looks horrible. So you're really confined to 2x16 characters. And putting some sensible stuff on there is more effort than I was prepared to spend to this point.
 All the pins needed to drive the display are connected to the Arduino using long jumper wires. I soldered a pin strip to the display board to be able to just plug them on.
+
+##### RFID reader
+The RFID reader comes with a small board of its own which you need to connect. Since I was too lazy to figure out a way to secure it to the front panel, I simply soldered it onto the prototyping board and connected it up that way (the upside down board one the left on the picture above).
+I used hot glue to stick the RFID antenna to the front panel and to stabilize the connection between the actual antenna and the cable leading to the reader board. These braids are so fine I was worried they'll break before I can fix them.
+
 
 
 
