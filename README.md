@@ -180,12 +180,49 @@ I used hot glue to stick the RFID antenna to the front panel and to stabilize th
 
 
 ## Software
-### Overview
-#### General Architecture
-#### Arduino Sketch
+The whole thing is based on the Music Player Daemon mpd. In theory you scrap the whole interface on the box and just control the whole thing with [M.A.L.P.](https://play.google.com/store/apps/details?id=org.gateshipone.malp) or some other mpd remote control app. 
+But of course that wouldn't be as much fun. So we have to roll our own for hooking up all that interface stuff.
+
+### General Architecture
+So in general, there are 4 components that interact somehow:
+- The Arduino - handling the front end user interface and presentation layer (aka Display)
+- The Arduinogateway - the code translating user input from the Arduino to commands to the mpd (and info back to the display)
+- The Playlist Mapper - handling the database to translate an RFID tag to a path which the mpd can play
+- The mpd - playing the actual music
+
+### Arduino Sketch
+The Arduino folder is actually a complete [platform.io](http://platformio.org/) project. It enables you to write your changed Arduino sketch stright to the Arduino from the Raspberry. No more clunky Arduino IDE. It will even download and install all the necessary libraries automatically. I love it.
+
+Anyway, there's quite a bit going on in the sketch, so let's check it out component by component
+#### Display
+I use the [LiquidCrystal](https://www.arduino.cc/en/Tutorial/LiquidCrystalDisplay) [Library](https://www.arduino.cc/en/Reference/LiquidCrystal), which is easy enough to use. As I mentioned, scrolling looks horrible because the display is so slow to switch on and off. Pixels which are used from one step to the next remain really bright, while the others are pretty dim. The result is pretty much garbled. Anyway, if you want to try it, [this sketch proposed by Goet](https://forum.arduino.cc/index.php?topic=216486.msg3338710#msg3338710) seems to work pretty well...
+
+One thing that I think is pretty neat is the automatic backlight dimming I implemented using the PWM pin on the Arduino. By hooking up the backlight pin of the displa to one of the "analog" pins of the Arduino, I'm able to dim the backlight in the code. It goes bright at any input, and dims after there hasn't been any input for 10 seconds.
+
+#### Serial Connection
+Using SoftwareSerial for the serial connection to the Raspi through the USB cable. The Arduino is also powered through the USB cable.
+The protocol between the Arduino and the Raspi (Arduinogateway process) is extremely simple. There are 4 commands which the Arduino can send to the Raspi:
+
+- CMD: setvol xx
+- CMD: previous
+- CMD: next
+- playpause
+- RFID: xxxx
+
+Everything else that is sent will just be logged by Arduinogw. Everything the Arduino receives on the serial connection is printed on the display.
+
+#### Rotary Encoder
+Oh boy, I tried many libraries for rotary encoders. None really worked. Then I found the [stuff the boolrules posted](https://forum.arduino.cc/index.php?topic=242356.msg2308019#msg2308019). I have no idea what it does, but I was able to integrate it and it works like a treat. It has two modes (interrupt and polling), I use it in polling mode and have thrown away the unused interrupt code.
+
+#### Buttons
+#### RFID reader
+
+
+### Raspberry
 #### Arduino Gateway
 #### Playlist mapper
-### Arduino specifics
+
+
 
 ## Deployment
 ### Ansible Playbooks
