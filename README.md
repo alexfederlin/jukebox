@@ -79,6 +79,10 @@ On the sides of the box are holes, so you can carry it (if you use it as an actu
 I had the plywood for the front cut to size in the hardware store. If you have a buzz saw, you can probably do it yourself, but with a jigsaw - forget it. The front I set into the box and is screwed into the slats in the corners.
 Before you do that, all the components have to be fixed to it of course. The layout of the front panel you can find as a draw.io sketch in the Documentation folder of this repo.
 
+
+
+![Front panel in intermediate stage](https://lh3.googleusercontent.com/KnXsJln1Bquqtn5p8mh-4QFw91fhGseS-2i6s9ZYvtAo9sQVTgemcS-LPBM7Wk3klUYn0pOHfd4q0L_zFknLclYxM_mvy0OzIASM_FacSYd0XWuJVIPOZ-b21lAaf7sdmohfKLaudNY)
+
 The front panel holds 
 - the speakers
 - amp
@@ -110,6 +114,8 @@ When cutting out the holes for the speakers - cut the big holes first, before yo
 
 #### Back plane
 As back plane I used another piece of plywood. This one I cut myslf, because you can't see it anyway, so it's ok if the edges are a bit squiggly. I glued some scrap pieces of plywood to the bottom of the box so it's raised up a bit. I put in some screws at an angle that go into the corner slats to hold it in place.
+
+![Backplane intermediate](https://lh3.googleusercontent.com/HYZRa7jl0EmlxhneIKTELqHd_iMV9qOtNZCo-W0w6oK2wljI6KB8HYewQrOslvmv-UHOn5q2DkL2MiKuu5QUrLFFTVN-esSuDVbFTCRbSzZQ2eYnbDCnmPXUIOSu6kCEvSykt8D66rg)
 
 The backplane only holds
 - the Raspberry
