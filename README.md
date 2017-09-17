@@ -224,18 +224,86 @@ Oh boy, I tried many libraries for rotary encoders. None really worked. Then I f
 
 
 ## Deployment
-If you have a Linux or Mac system, you can just follow the instructions below. If you're on Windows, you'll have to make Ansible run as Control node somewhere somehow. 
+If you have a Linux or Mac system, you can just follow the instructions below. If you're on Windows, you'll have to make Ansible run as Control node [somewhere somehow](http://www.tomsitpro.com/articles/how-to-use-ansible-on-windows,1-3479.html). 
 
 1. On your main PC: install Ansible
 2. PC: clone this git repo
 3. Raspi: install latest Raspian light
 3. Raspi: [enable ssh access](https://www.raspberrypi.org/documentation/remote-access/ssh/) and make sure you can login to the Raspi from your main PC
 4. PC: make sure you have an ssh key and install it on the Raspi: `cat ~/.ssh/id_rsa.pub | ssh pi@raspberry 'mkdir .ssh && cat >> .ssh/authorized_keys'`
+5. PC: enter the IP of your raspi in the ansibles inventory
+6. PC: start the playbooks in order 1-3. 
 
 ### Ansible Playbooks
+- 01:
+  - set password of user pi to: jukebox
+  - force apt to use IP4 (else apt installation does not work for me)
+  - force audio through 3,5mm jack
+  - do apt update / upgrade and install several packages
+  - download and install node.js 7.9.0
+  - instructs mpd to update its database
+- 01a: You can skip 01a if you do not have an extra partition for your music (see multi-partition setup below).
+- 02: clone this git repo and install the necessary nodejs modules
+- 03: Sets up the necessry services to be started at boot and starts them
+- 04: is only needed if you want to use rsync to sync a music folder on your main (or other) PC to the jukebox.
+
+If all the playbooks went through without error, everything should be installed and configured and all services should be up and running on the raspberry.
+There are a couple of optional playbooks which 
+- opt01/a: allow you to switch back and forth between a USB sound card and the built-in 3.5 jack audio output
+- opt02: Installs [platformio](http://platformio.net) on the raspi (for flashing your Arduino straight from the Raspi)
 
 ## Operations
 
 ## Provisioning
 
+
+# Special cases
+## Multi-Partition setup.
+I like to have my music on another partition than the root system. In case I need to reinstall the system, I don't have to re-upload all of the music. Having multiple partitions on a raspi system is not quite as straightforward as I'd hoped. 
+In general Raspbian resizes the root partition to fill the whole medium at the first boot. It does not do this, if another partition is already present on the device. In that case, the root partition of the raspi is too small to install anything extra. So you have to enlarge it manually. After doing that, the PARTUID has changed, so you need to update the /boot/cmdline.txt and /etc/fstab on your raspi system...
+
+### WARNING - HERE BE DRAGONS
+In the following I'll describe how I set it up. You'll have to think for yourself what you are doing! I take no responsibility for any wiped harddrives...
+
+1. Download latest raspbian (
+2. check if download is correct `sha256sum 2017-08-16-raspbian-stretch-lite.zip`
+3. unzip raspbian image `unzip 2017-08-16-raspbian-stretch-lite.zip`
+4. put on SD Card - MAKE SURE YOU SPECIFY THE CORRECT DEVICE AS of=/dev/sxx `sudo dd if=2017-08-16-raspbian-stretch-lite.img of=/dev/sxx bs=1M`
+5. create additional partition on sdcard for music `fdisk /dev/sxx`
+    If you start fdisk and [p]rint all partitions, you will find something like this:
+```
+Medium /dev/sdd: 59,5 GiB, 63864569856 Bytes, 124735488 Sektoren
+Einheiten: sectors von 1 * 512 = 512 Bytes
+Sektorengröße (logisch/physisch): 512 Bytes / 512 Bytes
+I/O Größe (minimal/optimal): 512 Bytes / 512 Bytes
+Typ der Medienbezeichnung: dos
+Medienkennung: 0xee397c53
+
+Gerät      Boot Start    Ende Sektoren Größe Id Typ
+/dev/sdd1        8192   93813    85622 41,8M  c W95 FAT32 (LBA)
+/dev/sdd2       94208 3621911  3527704  1,7G 83 Linux
+```
+or, if you want to use parted
+```
+$ sudo parted /dev/sdd
+GNU Parted 3.2
+/dev/sdd wird verwendet
+Willkommen zu GNU Parted! Rufen Sie »help« auf, um eine Liste der verfügbaren Befehle zu erhalten.
+(parted) p                                                                
+Modell: Generic STORAGE DEVICE (scsi)
+Festplatte  /dev/sdd:  63,9GB
+Sektorgröße (logisch/physisch): 512B/512B
+Partitionstabelle: msdos
+Disk-Flags: 
+
+Nummer  Anfang  Ende    Größe   Typ      Dateisystem  Flags
+ 1      4194kB  48,0MB  43,8MB  primary  fat32        LBA
+ 2      48,2MB  1854MB  1806MB  primary  ext4
+```
+
+As you can see, the raspi partition is only 1,7 Gb. There will most likely a lot of empty space on your device left. If you boot this now, raspian will automatically resize the root partition to take up the whole device. 
+
+What you actually want is a root partition which is 5-6GB and another partition which takes up the remaining space on the device for your data. 
+
+So you need to delete the root partition, recreate it with the same start boundary, but a bit larger, and then create another partition for your data taking up the rest of the space (or however much you like)
 
