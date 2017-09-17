@@ -80,14 +80,6 @@
       shell: rm -rf /tmp/node-v7.9.0-linux-armv6l*
       args:
         removes: /tmp/node-v7.9.0-linux-armv6l/
-    - name: mount music partition
-      mount:
-        fstype: ext4
-        opts: defaults,noatime
-        path: /var/lib/mpd/music
-        state: mounted
-        src: 'PARTUUID=0c47fa80-05'
-      become: yes
     - name: update mpd
       command: mpc update
 
