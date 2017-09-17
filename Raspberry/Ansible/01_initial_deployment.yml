@@ -6,7 +6,7 @@
     - name: change password
       user: 
         name: pi
-        password: $6$Q1/azKlDyAZrQO6$NKOhziJTt4/4WHsS/DZKD0ZCL5GnYkV.hZLM.rrlOS5qhcxwk.JTVxB.A0o5BLugg5KavnJqKDy6PnE70v8t0.
+        password: $6$VtMHhDfgnc6u6c$9sX8V/93JgxvAWkPjVttzm8Wq3SUWy48RXoMlq.6GoVWB10GdWUFhTn6aXPRdRV9Owi48FxBq3QFzFtUgvk0V0
         update_password: always 
       become: yes
     - name: force apt to use IPv4
