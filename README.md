@@ -200,13 +200,15 @@ One thing that I think is pretty neat is the automatic backlight dimming I imple
 
 #### Serial Connection
 Using SoftwareSerial for the serial connection to the Raspi through the USB cable. The Arduino is also powered through the USB cable.
-The protocol between the Arduino and the Raspi (Arduinogateway process) is extremely simple. There are 4 commands which the Arduino can send to the Raspi:
+The protocol between the Arduino and the Raspi (Arduinogateway process) is extremely simple. There are 5 commands which the Arduino can send to the Raspi:
 
 - CMD: setvol xx
 - CMD: previous
 - CMD: next
 - playpause
 - RFID: xxxx
+
+The ones prefixed by CMD: are piped verbatim to the mpd by the Arduinogw. The others need to be handled separately.
 
 Everything else that is sent will just be logged by Arduinogw. Everything the Arduino receives on the serial connection is printed on the display.
 
