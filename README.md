@@ -214,55 +214,67 @@ playpause: The Arduino does not know whether the player is currently playing or 
 
 RFID: xxxx: with this the Arduinogw process needs to find out which command/playlist is attached to that RFID before being able to send it.
 
-Everything else that is sent will just be logged by Arduinogw. Everything the Arduino receives on the serial connection is printed on the display.
+Everything else that is sent will just be logged by Arduinogw. 
+
+For the return communication, I decided to terminate each command or piece of information sent to the Arduino with a new line. That way I can deal with incoming messages in one piece and don't have to manually find out if what I've received so far makes sense or not. Everything the Arduino receives on the serial connection is printed on the display and sent back to Arduinogw.
 
 #### Rotary Encoder
-Oh boy, I tried many libraries for rotary encoders. None really worked. Then I found the [stuff the boolrules posted](https://forum.arduino.cc/index.php?topic=242356.msg2308019#msg2308019). I have no idea what it does, but I was able to integrate it and it works like a treat. It has two modes (interrupt and polling), I use it in polling mode and have thrown away the unused interrupt code.
+Rotary Encoders are pretty cool. [Here is how they work](http://henrysbench.capnfatz.com/henrys-bench/arduino-sensors-and-input/keyes-ky-040-arduino-rotary-encoder-user-manual/).
+But oh boy, getting them to work properly is not easy. I tried many libraries for rotary encoders. None really worked. Then I found the [stuff the boolrules posted](https://forum.arduino.cc/index.php?topic=242356.msg2308019#msg2308019). I have no idea what it does, but I was able to integrate it and it works like a treat. It has two modes (interrupt and polling), I use it in polling mode and have thrown away the unused interrupt code.
 Some code in the loop section takes care that you cannot turn the volume up to 11. Well actually you can increment and decrement in steps of 10 between 0 and 100. Why not 1-10? Laziness. That way I can push the value through all the way to mpd.
 
 #### Buttons
 The button stuff is pretty straight forward. There is is three buttons connected to three input pins. If a button is pressed, we send the appropriate command. And we do not send any other button event until that initial button is released. Mainly, this prevents repeatedly sending the same command as long as the button is pushed. As a side effect, pushing several buttons at once does not have any effect. There is only one button command sent.
 
 #### RFID reader
-0007616525
+The RFID reader code needs to deal with some special cases. 
+The RFID reader will repeat the RFID it has in range every couple 100 ms as long as it is in range. Of course we only want to send the command to play a given RFID tag only once. So there is a blocktimer of 5 seconds during which the same RFID tag is ignored.
+At the same time I found that the  RFID reader sometimes spits out random RFID tags. But these are not repeated. So if a RFID tag is read, it will actually be ignored the first time. Only if the RFID reader signals again within 1 second, we actually look at what has been sent.
 
-0011 0000 
-0011 0000 
-0011 0000 
-0011 0111 
-0011 0110 
-0011 0001 
-0011 0110 
-0011 0101 
-0011 0010 
-0011 0101
+The format in which the RFID reader signals the IDs takes some bit shifting to actually get a decimal number out of.
+I'll put here the reverse engineering of the code I actually took from somewhere.
 
-remove the leading 0011s
+Consider the following RFID tag in decimal: 0007616525
+In ASCII this would actually be the following binary octets:
 
-0000 
-0000 
-0000 
-0111 
-0110 
-0001 
-0110 
-0101 
-0010 
-0101
+    0011 0000 
+    0011 0000 
+    0011 0000 
+    0011 0111 
+    0011 0110 
+    0011 0001 
+    0011 0110 
+    0011 0101 
+    0011 0010 
+    0011 0101
 
-and put them together to new bytes
+Now we remove the leading 0011s
 
-0000 0000  0x0
-0000 0111  0x7
-0110 0001  0x61
-0110 0101  0x65
-0010 0101  0x25
+    0000 
+    0000 
+    0000 
+    0111 
+    0110 
+    0001 
+    0110 
+    0101 
+    0010 
+    0101
+
+and concatenate the remaining half octets (nibbles) together to new bytes
+
+    0000 0000  0x0
+    0000 0111  0x7
+    0110 0001  0x61
+    0110 0101  0x65
+    0010 0101  0x25
 
 
 now the number (7 mio 616 thousend 525) is converted to bin
-0111 0100  0x74
-0011 1000  0x38
-0000 1101  0x0D
+
+    0111 0100  0x74
+    0011 1000  0x38
+    0000 1101  0x0D
 
 
 
