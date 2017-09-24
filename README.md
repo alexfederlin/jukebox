@@ -210,12 +210,19 @@ The protocol between the Arduino and the Raspi (Arduinogateway process) is extre
 
 The ones prefixed by CMD: are piped verbatim to the mpd by the Arduinogw. The others need to be handled separately.
 
+playpause: The Arduino does not know whether the player is currently playing or not (I guess you could implement it in a way that the Arduino gets informed of the state and stores that state. But whatever). So if the play/pause button is pressed, this tells the Arduinogw process that it should toggle the play/pause state of the player. More on that in the ArduinoGW section
+
+RFID: xxxx: with this the Arduinogw process needs to find out which command/playlist is attached to that RFID before being able to send it.
+
 Everything else that is sent will just be logged by Arduinogw. Everything the Arduino receives on the serial connection is printed on the display.
 
 #### Rotary Encoder
 Oh boy, I tried many libraries for rotary encoders. None really worked. Then I found the [stuff the boolrules posted](https://forum.arduino.cc/index.php?topic=242356.msg2308019#msg2308019). I have no idea what it does, but I was able to integrate it and it works like a treat. It has two modes (interrupt and polling), I use it in polling mode and have thrown away the unused interrupt code.
+Some code in the loop section takes care that you cannot turn the volume up to 11. Well actually you can increment and decrement in steps of 10 between 0 and 100. Why not 1-10? Laziness. That way I can push the value through all the way to mpd.
 
 #### Buttons
+The button stuff is pretty straight forward. There is is three buttons connected to three input pins. If a button is pressed, we send the appropriate command. And we do not send any other button event until that initial button is released. Mainly, this prevents repeatedly sending the same command as long as the button is pushed. As a side effect, pushing several buttons at once does not have any effect. There is only one button command sent.
+
 #### RFID reader
 0007616525
 
