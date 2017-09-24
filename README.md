@@ -217,6 +217,49 @@ Oh boy, I tried many libraries for rotary encoders. None really worked. Then I f
 
 #### Buttons
 #### RFID reader
+0007616525
+
+0011 0000 
+0011 0000 
+0011 0000 
+0011 0111 
+0011 0110 
+0011 0001 
+0011 0110 
+0011 0101 
+0011 0010 
+0011 0101
+
+remove the leading 0011s
+
+0000 
+0000 
+0000 
+0111 
+0110 
+0001 
+0110 
+0101 
+0010 
+0101
+
+and put them together to new bytes
+
+0000 0000  0x0
+0000 0111  0x7
+0110 0001  0x61
+0110 0101  0x65
+0010 0101  0x25
+
+
+now the number (7 mio 616 thousend 525) is converted to bin
+0111 0100  0x74
+0011 1000  0x38
+0000 1101  0x0D
+
+
+
+
 
 
 ### Raspberry
