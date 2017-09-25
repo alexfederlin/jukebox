@@ -315,8 +315,41 @@ And then we also add the contents of data[4]:
 So, if we output this in its decimal representation we get what we want...
 
 ### Raspberry
+
 #### Arduino Gateway
+
+This is the main controlling component of the Jukebox. The actual playback of media files is handled by mpd.
+This process listens to the input coming from the Arduino on the serial connection.
+The commands are partly passed on directly to mpd, partly they are pre processed before the required requests are sent to mpd
+
+There are three types of messages that can come from the Arduino
+1. button presses
+   button presses can result in three different messages
+   - prev
+   - next
+   - playpause
+   The first two can be put through to the mpd server. Playpause first needs to determine the current status of playback (play, stop, pause) and will then send either 
+   - pause (if current status is play) 
+   - play (if current status is anything else)
+
+2. Volume messages
+   volume messages are sent by the Arduino the form of volume/<value>
+   This is the format expected by mpd and can be sent straight on
+3. RFID reads
+    If an RFID tag is scanned the message will look like: "RFID: <rfidTag>"
+    First of all, we need to figure out which playlist is connected to this RFID tag. This is done by the process playlistmapper, listening on the given port and expects the RFID tag. It will reply with the appropriate playlist/folder name which will be sent to mpd.
+
+Requirements:
+- mpd must be running and it's library up to date
+- playlistmapper must be running and configured to translate RFID tags to playlists present in mpd
+
+
 #### Playlist mapper
+
+Playlistmapper is a simple web server based on nodejs express which also interacts with a DB backend (a very simple file handled by nedb).
+The DB stores the relation between the RFID tags and the playlist/Folder names. 
+It exposes a REST interface which enables querying for a certain RFID tag.
+The reply is provided in the form of a JSON String including the RFID tag as well as the playlist name: {"rfid":"7616525","playlist":"plA"}
 
 
 
