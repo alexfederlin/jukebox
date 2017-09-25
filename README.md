@@ -231,8 +231,10 @@ The RFID reader code needs to deal with some special cases.
 The RFID reader will repeat the RFID it has in range every couple 100 ms as long as it is in range. Of course we only want to send the command to play a given RFID tag only once. So there is a blocktimer of 5 seconds during which the same RFID tag is ignored.
 At the same time I found that the  RFID reader sometimes spits out random RFID tags. But these are not repeated. So if a RFID tag is read, it will actually be ignored the first time. Only if the RFID reader signals again within 1 second, we actually look at what has been sent.
 
-The format in which the RFID reader signals the IDs takes some bit shifting to actually get a decimal number out of.
-I'll put here the reverse engineering of the code I actually took from somewhere.
+The format in which the RFID reader signals the IDs got me stumped initially, since it just wasn't what I expected. Also my hex is quite rusty. It takes some bit shifting to actually get a decimal number out of what you get from the RFID Reader.
+
+##### Expectation
+At first I somehow expected the individual decimal digits to be hex encoded. So I expected something like this:
 
 Consider the following RFID tag in decimal: 0007616525
 In ASCII this would actually be the following binary octets:
@@ -269,17 +271,48 @@ and concatenate the remaining half octets (nibbles) together to new bytes
     0110 0101  0x65
     0010 0101  0x25
 
+##### Reality
 
-now the number (7 mio 616 thousend 525) is converted to bin
+In reality, what you get from the RFID reader is of course the complete number (7 mio 616 thousend 525) in hex:
 
     0111 0100  0x74
     0011 1000  0x38
     0000 1101  0x0D
 
+The format in which you get it is an array of bytes, so actually:
 
+    data[1] = 0x00
+    data[2] = 0x74
+    data[3] = 0x38
+    data[4] = 0x0D
 
+So, in order to convert this to a usable decimal number (because that's what I want, the RFID is printed on the card in decimal as well), there is a bit of casting and bit shifting to do.
 
+     unsigned long result = ((unsigned long int)data[1]<<24) + ((unsigned long int)data[2]<<16) + ((unsigned long int)data[3]<<8) + data[4];
+     
+First of all, we need to cast all of this to unsigned long int in order to be even able to shift it that far.
+So we convert the byte in data[1] to an unsigned long and shift it by 24 bits to the left. Not really exciting because it's all 0.
+But now we take the contents of data[2] and shift it 16 bits. So we take
 
+    0111 0100
+
+convert it to
+
+    0000 0000 0000 0000 0000 0000 0111 0100
+    
+and then bit shift it by 16 bits:
+
+    0000 0000 0111 0100 0000 0000 0000 0000
+
+to that we add the contents of data[3], shifted by 8 bits:
+
+    0000 0000 0111 0100 0011 1000 0000 0000
+
+And then we also add the contents of data[4]:
+
+    0000 0000 0111 0100 0011 1000 0000 1101
+    
+So, if we output this in its decimal representation we get what we want...
 
 ### Raspberry
 #### Arduino Gateway
