@@ -162,7 +162,7 @@ void T2_isr( ) {
 
 
 void lcdDim( ) {
-  int lowest = 50;
+  int lowest = 20;
   for (int fadeValue = lcdCurBrightness ; fadeValue >= lowest; fadeValue -= 5) {
     // sets the value (range from 0 to 255):
     analogWrite(lcdBacklightPin, fadeValue);
