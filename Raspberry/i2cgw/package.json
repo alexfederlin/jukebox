@@ -1,0 +1,15 @@
+{
+  "name": "i2cnode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "i2c": "^0.2.3",
+    "i2c-bus": "^1.2.3"
+  }
+}
