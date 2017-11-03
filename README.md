@@ -360,7 +360,7 @@ If you have a Linux or Mac system, you can just follow the instructions below. I
 2. PC: clone this git repo
 3. Raspi: install latest Raspian light
 3. Raspi: [enable ssh access](https://www.raspberrypi.org/documentation/remote-access/ssh/) and make sure you can login to the Raspi from your main PC
-4. PC: make sure you have an ssh key and install it on the Raspi: `cat ~/.ssh/id_rsa.pub | ssh pi@raspberry 'mkdir .ssh && cat >> .ssh/authorized_keys'`
+4. PC: make sure you have an ssh key and install it on the Raspi: `cat ~/.ssh/id_rsa.pub | ssh pi@raspberry 'mkdir .ssh && cat >> .ssh/authorized_keys'` or simply `ssh-copy-id pi@raspberry`
 5. PC: enter the IP of your raspi in the ansibles inventory
 6. PC: start the playbooks in order 1-3. 
 
