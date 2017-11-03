@@ -1,5 +1,13 @@
 #include "TinyWire.h"
 
+#####################################################
+# This code takes care of reading three buttons
+# on an ATTiny45
+# It needs to be polled from the master and will 
+# return a bitmap of the currently pressed buttons
+#####################################################
+
+
 // read these as PB1, PB3, PB4
 #define button_pl 1
 #define button_pr 3
@@ -18,6 +26,8 @@ byte own_address = 10;
 // only pl pressed: 001000
 // only ne pressed: 000010
 // all three pressed: 101010
+// the reason for shifting everything up and having a bit free between is that the I2C bus sometimes right shifts the read byte for some reason. So if I would rely on the first bit to signal next pressed, I would end up with several next presses over time, as the read value would sometimes toggel to 0
+// with this bitmap, shifting the reading right one bit does not generate another button push (or release)
 // excellent explanation of the bitshifting here: https://embeddedthoughts.com/2016/05/25/getting-started-with-the-attiny85/#more-1173
 byte buttonstate = 0x0;
 
