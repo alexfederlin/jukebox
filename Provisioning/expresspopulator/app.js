@@ -6,20 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // stuff for the itemController
-var dir = require('node-dir');
-const sortBy = require('sort-array')
-var subdirs = [];
-var subrfid = [];
-var datastore = 'database.db'
-var Datastore = require('nedb')
-  , db = module.exports =new Datastore({ filename: datastore, autoload: true });
-var itemsToBeProcessed = 0;
+
+var app = module.exports = express();
 
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 
-var app = module.exports = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+//app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -54,4 +47,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+//module.exports = app;

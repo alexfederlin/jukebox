@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var app = require('../app');
+//var app = require('../app');
 
 // Require controller modules
 var item_controller = require('../controllers/itemController');
@@ -10,6 +10,13 @@ var item_controller = require('../controllers/itemController');
 //  res.render('index', { title: 'Express' });
 //});
 
-router.get('/',item_controller.item_list(app));
+console.log ("item controler:" + item_controller)
+console.log ("----------------")
+//console.log ("app: "+app)
+
+
+router.get('/', function(req, res, next){
+    item_controller.item_list(req, res, next)
+});
 
 module.exports = router;
