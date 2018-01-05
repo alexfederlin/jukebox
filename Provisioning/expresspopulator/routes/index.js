@@ -17,6 +17,7 @@ console.log ("----------------")
 
 router.get('/', function(req, res, next){
     item_controller.item_list(req, res, next)
+    //res.render('index', { title: 'Express' });
 });
 
 module.exports = router;
