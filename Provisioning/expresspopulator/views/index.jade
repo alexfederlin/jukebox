@@ -3,3 +3,24 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+
+  h1 Dynamic content
+
+  if error
+    p Error getting dynamic content.
+  else
+    p The library has the following record counts:
+
+  form(action='/update',method='POST',id='itemForm')
+    each item in items
+        fieldset
+          if item.name != null
+            div.item
+              label(for='item')= item.name
+              if item.rfid != null
+                div.controls
+                  input(type='text',id=item.name ,placeholder= item.rfid)
+              else
+                div.controls
+                  input(type='text',id=item.name,name='item',placeholder='rfid')
+    

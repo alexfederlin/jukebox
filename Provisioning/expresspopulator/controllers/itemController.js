@@ -24,34 +24,34 @@ function goThroughSubdirs(err, subdirs) {
 //define a new object with a path relative to jukebox folder
 //name is needed since the sorting algorithm sorts case sensitive, so make everything lower case to have alphabetical sorting
 function populateSubrfid(item, index, array) {
-  console.log("populateSubrfid")
+  //console.log("populateSubrfid")
       // use let instead of var to have individual obj objects in the closure below
       let obj = {
         'name': item.toLowerCase().replace('/home/alex/musik/jukebox/',''),
         'path': item.replace('/home/alex/Musik/jukebox/',''),
         'rfid': null
       };
-      console.log ("looking for " +  obj.path);
+      //console.log ("looking for " +  obj.path);
 
       // define a closure (I have no idea what I'm doing) as callbackfor the db.find call below
       function cl(err,docs){
-        console.log("closure");
+        //console.log("closure");
         if (err) throw err;
         if (docs.length == 0) {
-          console.log("docs.length==0")
+          //console.log("docs.length==0")
             subrfid.push(obj);
             return;
         }
-        console.log("MATCH!!! : "+docs[0].playpath);
-        console.log("setting rfid: " + docs[0].rfid);
-        console.log("on object:" + JSON.stringify(obj))
+        // console.log("MATCH!!! : "+docs[0].playpath);
+        // console.log("setting rfid: " + docs[0].rfid);
+        // console.log("on object:" + JSON.stringify(obj))
         obj.rfid = docs[0].rfid;
-        console.log("result:" + JSON.stringify(obj))
+        //console.log("result:" + JSON.stringify(obj))
 
         subrfid.push(obj);
 
         itemsToBeProcessed--;
-        console.log("items: " + itemsToBeProcessed)
+        //console.log("items: " + itemsToBeProcessed)
         if(itemsToBeProcessed === 2) {
           createForm(subrfid);
         }
@@ -65,7 +65,8 @@ function populateSubrfid(item, index, array) {
 //this is where we need to create a web form  from teh array and serve it out
 function createForm (subrfid) {
     subrfid.forEach(item => console.log(item.path + ' - ' + item.rfid))
-    response.send(sortBy(subrfid, 'name'));
+    //response.send(sortBy(subrfid, 'name'));
+    response.render('index', { title: 'Express', items: sortBy(subrfid, 'name') });
 }
 
 exports.item_list = function(req,res,next) {
