@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 //var app = require('../app');
+var path    = require("path");
 
 // Require controller modules
 var item_controller = require('../controllers/itemController');
@@ -15,9 +16,29 @@ console.log ("----------------")
 //console.log ("app: "+app)
 
 
-router.get('/', function(req, res, next){
+router.get('/items', function(req, res, next){
     item_controller.item_list(req, res, next)
     //res.render('index', { title: 'Express' });
 });
 
+router.get('/test',function(req,res){
+  res.sendFile(path.join(__dirname+'/../public/index.html'));
+  //__dirname : It will resolve to your project folder.
+});
+
+router.get('/mock',function(req,res){
+  res.sendFile(path.join(__dirname+'/../public/mock.json'));
+  //__dirname : It will resolve to your project folder.
+});
+
+router.get('/largemock',function(req,res){
+  res.sendFile(path.join(__dirname+'/../public/largemock.json'));
+  //__dirname : It will resolve to your project folder.
+});
+
+
+router.get('/vue.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/../public/javascripts/vue.js'));
+  //__dirname : It will resolve to your project folder.
+});
 module.exports = router;

@@ -65,8 +65,8 @@ function populateSubrfid(item, index, array) {
 //this is where we need to create a web form  from teh array and serve it out
 function createForm (subrfid) {
     subrfid.forEach(item => console.log(item.path + ' - ' + item.rfid))
-    //response.send(sortBy(subrfid, 'name'));
-    response.render('index', { title: 'Express', items: sortBy(subrfid, 'name') });
+    response.send(sortBy(subrfid, 'name'));
+    //response.render('index', { title: 'Express', items: sortBy(subrfid, 'name') });
 }
 
 exports.item_list = function(req,res,next) {

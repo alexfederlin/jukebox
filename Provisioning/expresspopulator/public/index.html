@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <p>bla</p>
+    <ul id="items">
+        <li v-for="result in results">
+            {{ result.name }} 
+        </li>
+    </ul>
+    <p>blub</p>
+    <script src="http://localhost:3001/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+      el: '#items',
+      data: {
+        results: [{name: "foo", rfid: 987}]
+      },
+      mounted() {
+         axios.get("http://localhost:3001/mock")
+            .then(function(response) {
+                app.results = response.data;
+                //app.results = JSON.parse("[{\"name\": \"bla\", \"rfid\": 123}, {\"name\": \"blub\", \"rfid\": 456}]");
+                //app.results = JSON.parse(response.data);
+                console.log(response.data);
+            })
+            .catch(e => {
+                //this.errors.push(e)
+                console.log(e);
+            })
+      }
+    });
+
+    </script>
+</body>
+</html>

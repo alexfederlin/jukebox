@@ -1,0 +1,153 @@
+
+<!-- saved from url=(0026)http://localhost:3001/test -->
+<html lang="en" class="gr__localhost"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body data-gr-c-s-loaded="true">
+    <p>bla</p>
+    <ul id="items"><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li><li>
+             
+        </li></ul>
+    <p>blub</p>
+    <script src="./test_files/vue.js"></script>
+    <script src="./test_files/axios.min.js"></script>
+    <script type="text/javascript">
+    var app = new Vue({
+      el: '#items',
+      data: {
+        results: [{name: "foo", rfid: 987}]
+      },
+      mounted() {
+         axios.get("http://localhost:3001/mock")
+            .then(function(response) {
+                //app.results = response.data;
+                //app.results = JSON.parse("[{\"name\": \"bla\", \"rfid\": 123}, {\"name\": \"blub\", \"rfid\": 456}]");
+                app.results = response.data;
+                console.log(response.data);
+            })
+            .catch(e => {
+                //this.errors.push(e)
+                console.log(e);
+            })
+      }
+    });
+    </script>
+
+<span id="sbmarwbthv5"></span></body></html>
