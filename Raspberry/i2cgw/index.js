@@ -1,9 +1,22 @@
 var i2c = require('i2c')
 
+var SegfaultHandler = require('segfault-handler');
+
+SegfaultHandler.registerHandler("crash.log"); // With no argument, SegfaultHandler will generate a generic log file name
+SegfaultHandler.registerHandler("crash.log", function(signal, address, stack) {
+  console.log(stack);
+	// Do what you want with the signal, address, or stack (array)
+	// This callback will execute before the signal is forwarded on.
+});
+
 var ADDR_BTN = 0x0a
 var ADDR_RTRY = 0x0b
-var i2c1_btn = new i2c(ADDR_BTN, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
-var i2c1_rtry = new i2c(ADDR_RTRY, {device: '/dev/i2c-1'});
+try {
+  var i2c1_btn = new i2c(ADDR_BTN, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
+  var i2c1_rtry = new i2c(ADDR_RTRY, {device: '/dev/i2c-1'});
+} catch (err) {
+  console.log("one of the i2c devices may not be connected: "+err);
+}
 
 var prev_vol = 0
 var volume = 0
@@ -14,6 +27,7 @@ var printed = 0
 var blipcount = 0
 
 function poll() {
+try {
   i2c1_rtry.readByte(function (err, res){
   if (err) {
     console.log(err)
@@ -33,7 +47,12 @@ function poll() {
     }
     //setTimeout(poll, 500);
   });
+}
+catch(err) {
+  console.log("reading from Rotary encoder failed: "+err);
+}
 
+try {
    i2c1_btn.readByte(function (err, res){
      if (err) {
          console.log(err)
@@ -64,6 +83,11 @@ function poll() {
 
      setTimeout(poll, 20);
    });
+}
+catch(err){
+  console.log("Reading Buttons failed: "+err);
+}
+
 };
 
 console.log ("starting");
