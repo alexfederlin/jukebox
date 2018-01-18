@@ -11,12 +11,14 @@ SegfaultHandler.registerHandler("crash.log", function(signal, address, stack) {
 
 var ADDR_BTN = 0x0a
 var ADDR_RTRY = 0x0b
-try {
-  var i2c1_btn = new i2c(ADDR_BTN, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
-  var i2c1_rtry = new i2c(ADDR_RTRY, {device: '/dev/i2c-1'});
-} catch (err) {
-  console.log("one of the i2c devices may not be connected: "+err);
-}
+var ADDR_LCD = 0x3f
+// try {
+//   var i2c1_btn = new i2c(ADDR_BTN, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
+//   var i2c1_rtry = new i2c(ADDR_RTRY, {device: '/dev/i2c-1'});
+// } catch (err) {
+//   console.log("one of the i2c devices may not be connected: "+err);
+//   exit
+// }
 
 var prev_vol = 0
 var volume = 0
@@ -25,6 +27,44 @@ var previous = 0
 var count = 0
 var printed = 0
 var blipcount = 0
+
+
+//----------- LCD
+/*LCD = require("i2c-lcd")
+
+lcd = new LCD("/dev/i2c-1", 0x3f)
+lcd.init();
+lcd.clear();
+lcd.home();
+setTimeout(printcallback, 200);
+
+function printcallback() {
+lcd.print("Raspberry Pi")
+lcd.clear();
+lcd.print("blablubypi123")
+}
+*/
+
+var LCD = require('lcdi2c');
+var lcd = new LCD( 1, ADDR_LCD, 16, 2 );
+lcd.clear();
+lcd.on();
+lcd.println( 'This is line 1...', 1 );
+if ( lcd.error ) { 
+    lcdErrorHandler( lcd.error );
+} else {
+    lcd.println( 'This is line 2...', 2 );
+    if ( lcd.error ) {
+       lcdErrorHandler( lcd.error );
+    } 
+};   
+
+function lcdErrorHandler( err ) {
+    console.log( 'Unable to print to LCD display on bus 1 at address ' + ADDR_LCD );
+    //Disable further processing if application calls this recursively.
+};
+
+
 
 function poll() {
 try {
@@ -61,6 +101,8 @@ try {
      if (res == 2){
        if ((previous == 2) && (printed == 0)){
          console.log(count + ". pressed next");
+         lcd.clear()
+         lcd.print( 'Next');
          printed = 1
        }
        previous = 2
@@ -68,10 +110,16 @@ try {
      if ((res == 8) && (printed == 0)){
        console.log(count + ". pressed play");
        printed = 1
+       lcd.clear()
+       lcd.print( 'Play');
+
      }
      if ((res == 32) && (printed ==0)){
        console.log(count + ". pressed previous");
        printed = 1
+       lcd.clear()
+       lcd.print( 'Previous');
+
      }
      if (res == 0){
        if ((previous == 0) && (printed == 1)) {
@@ -92,6 +140,6 @@ catch(err){
 
 console.log ("starting");
 
-poll();
+//poll();
 
 
