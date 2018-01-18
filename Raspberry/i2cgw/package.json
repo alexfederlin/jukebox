@@ -9,9 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "i2c": "^0.2.3",
     "i2c-bus": "^1.2.3",
-    "i2c-lcd": "git+https://git@github.com/Patman27/i2c-lcd.git",
     "lcdi2c": "^1.0.6"
   }
 }
