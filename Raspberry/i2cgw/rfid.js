@@ -7,6 +7,7 @@ var buffer = new ArrayBuffer(4); // buffer holding just the RFID Tag
 var uint8 = new Uint8Array(7); // buffer holding RFID Tag + delimiter sequence 0 255 0
 var uint8_analyze = new Uint8Array(buffer); //8bit int view on the RFID tag (needs to be reordered)
 var uint32_analyze = new Uint32Array(buffer); // 32 bit int view on the RFID Tag
+var lastRFID=0;
 
 i2c1 = i2c.openSync(1);
 
@@ -19,7 +20,12 @@ function analyze(){
   // then we interpret the whole array as one big number, which happens to be 
   // exactly the RFID Tag we are after
   uint8_analyze.reverse();
-  console.log("RFID: " + uint32_analyze[0]);
+
+  // only display RFID tag if it changed
+  if (lastRFID != uint32_analyze[0]) {
+    console.log("RFID: " + uint32_analyze[0]);
+    lastRFID = uint32_analyze[0];
+  }
 }
 
 function poll() {
