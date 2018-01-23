@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "i2c-bus": "^1.2.3",
-    "lcdi2c": "^1.0.6"
+    "lcdi2c": "alexfederlin/lcdi2c"
   }
 }

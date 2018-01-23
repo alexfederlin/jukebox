@@ -36,7 +36,7 @@ function poll() {
   uint8.copyWithin(0,1); // shift
   uint8[uint8.length-1] = i2c1.receiveByteSync(ADDR_RFID); // push
   //console.log("data: " + uint8[0] + " " + uint8[1] + " " + uint8[2] + " " + uint8[3] + " " + uint8[4] + " " + uint8[5] + " " + uint8[6])
- 
+
   // the ATTiny is sending a delimiter sequence of 0 255 0 between RFID tags
   // only if we detect this delimiter sequence at the beginning of the array
   // we will trigger the analyzing function.
