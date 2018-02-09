@@ -18,6 +18,7 @@ var uint8 = new Uint8Array(7); // buffer holding RFID Tag + delimiter sequence 0
 var uint8_analyze = new Uint8Array(buffer); //8bit int view on the RFID tag (needs to be reordered)
 var uint32_analyze = new Uint32Array(buffer); // 32 bit int view on the RFID Tag
 var lastRFID=0;
+var rfidcount = 0;
 
 // Volume Stuff
 var prev_vol = 0
@@ -31,7 +32,9 @@ var blipcount = 0
 
 // LCD Stuff
 var LCD = require('lcdi2c');
+var lcdinit = false;
 var lcd = new LCD( 1, ADDR_LCD, 16, 2 );
+
 lcd.clear();
 lcd.on();
 
@@ -40,27 +43,31 @@ lcd.on();
 
 function cb(err,devices){
   if (err){
-    console.log(err)
+    log(err)
   }
-  console.log("Devices on the i2c bus:");
+  log("Devices on the i2c bus:");
   devices.forEach (function (device) {
-    console.log("0x"+device.toString(16));
+    log("0x"+device.toString(16));
   });
+}
+
+function log(str){
+  console.log(new Date().toISOString().replace(/T/, ' ') +" - " + str); 
 }
 
 function cbBtn(err,res){
   if (err) {
-     console.log(err)
+     log(err)
   }
   count += 1
   if (res == 2){
    if ((previous == 2) && (printed == 0)){
-     console.log(count + ". pressed next");
+     log(count + ". pressed next");
      try{
        lcd.clear()
        lcd.println( 'Next');
      } catch (err) {
-       console.log(err)
+       log(err)
      }
 
      printed = 1
@@ -68,31 +75,31 @@ function cbBtn(err,res){
    previous = 2
   }
   if ((res == 8) && (printed == 0)){
-   console.log(count + ". pressed play");
+   log(count + ". pressed play");
    printed = 1
    try{
      lcd.clear()
      lcd.println( 'Play');
    } catch (err) {
-     console.log(err)
+     log(err)
    }
 
 
   }
   if ((res == 32) && (printed ==0)){
-   console.log(count + ". pressed previous");
+   log(count + ". pressed previous");
    printed = 1
    try{
      lcd.clear()
      lcd.println( 'Previous');
    } catch (err) {
-     console.log(err)
+     log(err)
    }
 
   }
   if (res == 0){
    if ((previous == 0) && (printed == 1)) {
-     console.log(count + "released");
+     log(count + "released");
      printed = 0;
    }
    previous = 0
@@ -101,23 +108,41 @@ function cbBtn(err,res){
 
 function cbRtry(err,res){
   if (err) {
-    console.log(err)
+    log(err)
   }
-    volume = Math.floor(res/2.55);
+
+//ATTiny toggles highest bit in byte in case switch is pressed on the rotary encoder
+  if (res>=128){
+    if (lcdinit == false){
+      lcd.init();
+      lcd.clear()
+      lcdinit = true
+    }
+    log ("switch pressed");
+    res = res-128;
+  }
+  else {
+    if (lcdinit == true) {
+      volume = Math.floor(res/1.27);
+      lcd.println( "Volume: " + volume );
+    }
+    lcdinit = false;
+  }
+    volume = Math.floor(res/1.27);
     if (volume != prev_vol) {
       if (((volume > prev_vol-5) && (volume < prev_vol+5)) || (blipcount > 5)){
-        console.log(volume);
+        log(volume);
         try {
           lcd.clear()
           lcd.println( "Volume: " + volume );
         } catch (err) {
-          console.log(err)
+          log(err)
         }
 
         prev_vol = volume;
         blipcount = 0;
       }
-      else console.log("blip: "+volume);
+      else log("blip: "+volume);
       blipcount += 1;
     }
     else {
@@ -135,10 +160,18 @@ function cbRFID(){
 
   // only display RFID tag if it changed
   if (lastRFID != uint32_analyze[0]) {
-    console.log("RFID: " + uint32_analyze[0]);
-    lcd.clear()
-    lcd.println( "RFID: " + uint32_analyze[0] );
-    lastRFID = uint32_analyze[0];
+    rfidcount++;
+    if (rfidcount>1){
+    // log("RFID: " + uint32_analyze[0]);
+      log("RFID: " + uint32_analyze[0] + " rfidcount " + rfidcount);
+      lcd.clear()
+      lcd.println( "RFID: " + uint32_analyze[0] );
+      lastRFID = uint32_analyze[0];
+      rfidcount = 0;
+    }
+    else {
+      log ("new RFID read for the first time: "+ uint32_analyze[0]);
+    }
   }
 }
 
@@ -150,7 +183,7 @@ function poll() {
 
   }
   catch(err){
-    console.log("issue with reading from buttons or rotary enccoder: "+err)
+    log("issue with reading from buttons or rotary enccoder: "+err)
   }
 // read RFID
   // every time we get something new from the i2c bus, we basically shift
@@ -161,9 +194,9 @@ function poll() {
     uint8[uint8.length-1] = i2c1.receiveByteSync(ADDR_RFID); // push
   }
   catch(err){
-    //console.log("issue with reading from RFID: "+err);
+    //log("issue with reading from RFID: "+err);
   }
-  //console.log("data: " + uint8[0] + " " + uint8[1] + " " + uint8[2] + " " + uint8[3] + " " + uint8[4] + " " + uint8[5] + " " + uint8[6])
+  //log("data: " + uint8[0] + " " + uint8[1] + " " + uint8[2] + " " + uint8[3] + " " + uint8[4] + " " + uint8[5] + " " + uint8[6])
 
   // the ATTiny is sending a delimiter sequence of 0 255 0 between RFID tags
   // only if we detect this delimiter sequence at the beginning of the array
