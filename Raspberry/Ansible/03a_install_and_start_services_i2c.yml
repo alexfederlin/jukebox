@@ -1,0 +1,30 @@
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: copy startup scripts to systemd folder
+      shell: cp /home/pi/jukebox/Raspberry/startup/* /etc/systemd/system
+      become: yes
+    - name: enable jukebox_i2cgw to start at boot
+      systemd:
+        name: jukebox_i2cgw
+        enabled: yes
+      become: yes
+    - name: start jukebox_i2cgw
+      service:
+        name: jukebox_i2cgw
+        state: started
+        use: service
+      become: yes
+    - name: enable jukebox_playlistmapper to start at boot
+      systemd:
+        name: jukebox_playlistmapper
+        enabled: yes
+      become: yes
+    - name: start jukebox_playlistmapper
+      service:
+        name: jukebox_playlistmapper
+        state: started
+        use: service
+      become: yes
+...

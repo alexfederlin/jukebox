@@ -1,0 +1,22 @@
+[Unit]
+Description=i2cgw
+# Requires the mysql service to run first
+Requires=After=mpd.service       
+
+[Service]
+ExecStart=/usr/local/bin/node /home/pi/jukebox/Raspberry/i2cgw/i2cgw.js
+# Required on some systems
+#WorkingDirectory=/opt/nodeserver
+Restart=always
+ # Restart service after 10 seconds if node service crashes
+ RestartSec=10
+ # Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=jukebox-i2cgw
+#User=<alternate user>
+#Group=<alternate group>
+Environment=NODE_ENV=production PORT=1337
+
+[Install]
+WantedBy=multi-user.target
