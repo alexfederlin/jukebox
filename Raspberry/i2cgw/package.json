@@ -1,15 +1,17 @@
 {
-  "name": "i2cnode",
+  "name": "i2cgw",
   "version": "1.0.0",
-  "description": "",
+  "description": "Gateway between I2C and Raspi",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Alexander Federlin <alexander@federlin.de> (www.federlin.de)",
   "license": "ISC",
   "dependencies": {
     "i2c-bus": "^1.2.3",
-    "lcdi2c": "alexfederlin/lcdi2c"
+    "lcdi2c": "alexfederlin/lcdi2c",
+    "mpd": "^1.3.0",
+    "request": "^2.79.0"
   }
 }

@@ -14,13 +14,13 @@ GPIO.setmode(GPIO.BOARD)
 
 GPIO.setup(7, GPIO.OUT)
 GPIO.output(7, True)
-GPIO.setup(5, GPIO.IN)
+GPIO.setup(5, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
 # start the loop for every .5 seconds, waiting for LOW on pin 5
 # then 2 short flashes with led to confirm and shutdown to sleep mode
 
 while True:
-        if not (GPIO.input(5)):
+        if (GPIO.input(5)):
                 GPIO.output(7, False)
                 time.sleep(.1)
                 GPIO.output(7, True)
