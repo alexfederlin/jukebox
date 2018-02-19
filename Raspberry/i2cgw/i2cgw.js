@@ -67,6 +67,7 @@ var blipcount = 0
 var LCD = require('lcdi2c');
 var lcdinit = false;
 var lcd = new LCD( 1, ADDR_LCD, 16, 2 );
+var backlight = 1;
 
 lcd.clear();
 lcd.on();
@@ -239,12 +240,28 @@ function cbRtry(err,res){
 // Usually, the Rotary Encoder provides values between 0 and 254. However,
 // since we wanted to have the switch functionality, we sacrifice half the resolution
 // ATTiny toggles highest bit in byte in case switch is pressed on the rotary encoder
-// This will trigger a reset of the display
+// This will toggel the backlight of the display and do a reset of the display on turning on the backlight
   if (res>=128){
     if (lcdinit == false){
-      lcd.init();
-      lcd.clear()
-      lcdinit = true
+      try {
+
+        lcdinit = true
+        if (backlight == 1) {
+          lcd.setBacklight(0);
+          backlight = 0;
+        }
+        else {
+          lcd.setBacklight(1);
+          lcd.init();
+          lcd.clear()
+          backlight = 1;
+        }
+      }
+      catch (err){
+        log(err);
+      }
+
+
     }
     log ("switch pressed");
     res = res-128;
