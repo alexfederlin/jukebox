@@ -27,4 +27,16 @@
         state: started
         use: service
       become: yes
+    - name: enable jukebox_shutdownbutton to start at boot
+      systemd:
+        name: jukebox_shutdownbutton
+        enabled: yes
+      become: yes
+    - name: start jukebox_shutdownbutton
+      service:
+        name: jukebox_shutdownbutton
+        state: started
+        use: service
+      become: yes
+
 ...
