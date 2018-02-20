@@ -12,21 +12,21 @@ GPIO.setmode(GPIO.BOARD)
 
 # set pin 7 as output and HIGH, pin 5 is input
 
-GPIO.setup(7, GPIO.OUT)
-GPIO.output(7, True)
-GPIO.setup(5, GPIO.IN,pull_up_down=GPIO.PUD_UP)
+GPIO.setup(37, GPIO.OUT)
+GPIO.output(37, True)
+GPIO.setup(40, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
 # start the loop for every .5 seconds, waiting for LOW on pin 5
 # then 2 short flashes with led to confirm and shutdown to sleep mode
 
 while True:
-        if (GPIO.input(5)):
-                GPIO.output(7, False)
+        if not (GPIO.input(40)):
+                GPIO.output(37, False)
                 time.sleep(.1)
-                GPIO.output(7, True)
+                GPIO.output(37, True)
                 time.sleep(.1)
-                GPIO.output(7, False)
+                GPIO.output(37, False)
                 time.sleep(.1)
-                GPIO.output(7, True)
+                GPIO.output(37, True)
                 os.system("sudo shutdown -h now")
         time.sleep(.5)
