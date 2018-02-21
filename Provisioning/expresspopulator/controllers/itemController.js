@@ -56,7 +56,7 @@ function populateSubrfid(item, index, array) {
           createForm(subrfid);
         }
       }
-
+      // if the path is found in the db, call the closure to add the RFID tag 
       db.find({playpath:obj.path}, cl);
 
 }
@@ -84,4 +84,11 @@ exports.item_list = function(req,res,next) {
 
     // entry command. Once all subdirs are found, run the "goThroughSubdirs callback"
     dir.subdirs("/home/alex/Musik/jukebox", goThroughSubdirs);
+};
+
+exports.update = function(req,res,next) {
+  console.log("update started")
+  console.log(req.body);
+  //console.log(next);
+  res.send("not yet implemented");
 };

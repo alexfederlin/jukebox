@@ -21,6 +21,11 @@ router.get('/items', function(req, res, next){
     //res.render('index', { title: 'Express' });
 });
 
+router.put('/item', function(req, res, next){
+    item_controller.update(req, res, next)
+    //res.render('index', { title: 'Express' });
+});
+
 router.get('/test',function(req,res){
   res.sendFile(path.join(__dirname+'/../public/index.html'));
   //__dirname : It will resolve to your project folder.

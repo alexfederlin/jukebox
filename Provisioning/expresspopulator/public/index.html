@@ -21,7 +21,7 @@
         results: [{name: "foo", rfid: 987}]
       },
       mounted() {
-         axios.get("http://localhost:3001/mock")
+         axios.get("http://localhost:3001/items")
             .then(function(response) {
                 app.results = response.data;
                 //app.results = JSON.parse("[{\"name\": \"bla\", \"rfid\": 123}, {\"name\": \"blub\", \"rfid\": 456}]");
