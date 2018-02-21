@@ -1,0 +1,9 @@
+
+---
+- hosts: all
+  remote_user: pi
+  tasks:
+    - name: set volume of USB soundcard to higher level
+      command: /usr/bin/amixer -c 1 cset numid=6,iface=MIXER,name='Speaker Playback Volume' 100
+      become: yes
+...
