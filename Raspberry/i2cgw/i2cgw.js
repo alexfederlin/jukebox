@@ -104,6 +104,10 @@ client.on('system-player', function() {
   });
 })
 
+var request = require('request');
+const playlistmapperurl = 'http://localhost:4000/'
+
+
 function lcdWrite(message){
   lcd.clear()
   lcd.println(message);
@@ -136,15 +140,21 @@ function resolvePlaylist (error, response, body) {
       console.log(body)  
       reply = JSON.parse(body)
       if (reply.playlist) {
-        if (reply.playlist.startsWith('N/A')) 
+        if (reply.playlist.startsWith('N/A')) {
+          lcdWrite( "Bad: " + rfid );
           return
+        }
         playPlaylist(reply.playlist)
       }
       if (reply.playpath) {
-        if (reply.playpath.startsWith('N/A')) 
+        if (reply.playpath.startsWith('N/A')) {
+          lcdWrite( "Bad: " + rfid );
           return
+        }
         playPlaylist(reply.playpath)
       }
+      lcdWrite( "RFID: " + rfid );
+      lastRFID = rfid;
    }
 };
 
@@ -306,7 +316,7 @@ function cbRFID(){
   // only display RFID tag if it changed
   if (lastRFID != rfid) {
     rfidcount++;
-    if (rfidcount>1){
+    if (rfidcount>2){
     // log("RFID: " + uint32_analyze[0]);
       log("RFID: " + rfid + " rfidcount " + rfidcount);
 
@@ -314,14 +324,14 @@ function cbRFID(){
       var req = playlistmapperurl+'getplaylist/'+rfid;
       log (req);
       request(req, resolvePlaylist);
-
-      lcdWrite( "RFID: " + rfid );
-      lastRFID = rfid;
       rfidcount = 0;
     }
     else {
       log ("new RFID read for the first time: "+ rfid);
     }
+  }
+  else {
+    rfidcount = 0;
   }
 }
 
