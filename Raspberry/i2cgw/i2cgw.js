@@ -135,6 +135,11 @@ function toMpd(message) {
   });
 };
 
+//add leading 0's to RFID tag
+function pad(n, width=10, z=0) {
+  return (String(z).repeat(width) + String(n)).slice(String(n).length)
+} 
+
 function resolvePlaylist (error, response, body) {
    if (!error && response.statusCode == 200) {
       console.log(body)  
@@ -312,7 +317,7 @@ function cbRFID(){
   // then we interpret the whole array as one big number, which happens to be
   // exactly the RFID Tag we are after
   uint8_analyze.reverse();
-  rfid = uint32_analyze[0];
+  rfid = pad(uint32_analyze[0]);
   // only display RFID tag if it changed
   if (lastRFID != rfid) {
     rfidcount++;
