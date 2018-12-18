@@ -24,6 +24,7 @@ app.get('/largemock',function(req,res){
 });
 
 
+//for a given path, return the rfid if already present in the db
 app.get('/rfid', function(req, res, next) {  
     //console.log(req.query);
     db.find({playpath:req.query.path}, function(err,docs){
@@ -43,7 +44,10 @@ app.get('/rfid', function(req, res, next) {
     });
 });
 
-//update the rfid for a path
+//update the rfid for a path to the given value
+//if the given rfid is already in use for another path, 
+// return an error message incuding that path
+// TODO: currently removing existing RFIDs is not supported
 app.post('/rfid', function(req, res, next) {  
     //console.log("%s %O", "post to rfid received:", req);
     console.log("post to "+req.body.path+" - rfid received:", req.body.rfid);
@@ -73,17 +77,7 @@ app.post('/rfid', function(req, res, next) {
     });
 });
 
-app.get('/api', function(req, res, next) {  
-    let data = {
-        message: 'Hello World!'
-    };
-    res.status(200).send(data);
-});
-app.post('/api', function(req, res, next) {  
-    let data = req.body;
-    // query a database and save data
-    res.status(200).send(data);
-});
+//return the whole directory tree
 app.get('/dirtree', function(req, res, next) {
     // create a directory tree with just directories - exclude all files  
     var tree = dirTree('/home/alex/Musik/jukebox/', {

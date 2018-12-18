@@ -14,6 +14,9 @@ jQuery(function($) {
       // make the list with the ID 'newList' collapsible
       // see http://code.iamkate.com/javascript/collapsible-lists/
       CollapsibleLists.applyTo(document.getElementById('newList'));
+      // add an event handler which triggers on any change to a text input field
+      // it will trigger posting the changed value with the path the input field 
+      // belongs to to the server
       $("input[type='text'").change(function(){
           var path = b64DecodeUnicode($(this).attr('id'));
           var rfid = $(this).val();
@@ -28,6 +31,7 @@ jQuery(function($) {
     }
   });
 
+// this changes the value of the input text field with the given path to the given rfid
   function changeval(path, rfid){
     var cleanpath = clean(path);
     $('input[id="'+cleanpath+'"]').val(rfid)
@@ -35,6 +39,7 @@ jQuery(function($) {
   }
 
   //see here: https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+  // this is done because the id attribute cannot handle slashes, whitespace and all sorts of other characters
   function b64EncodeUnicode(str) {
     // first we use encodeURIComponent to get percent-encoded UTF-8,
     // then we convert the percent encodings into raw bytes which
@@ -53,6 +58,8 @@ jQuery(function($) {
   }
 
 
+// query the rfid for  given path from the server
+// this is called for every field and the value is updated to the returned value
   function getRFID(path) {
     $.ajax({
       type:     "GET",
@@ -73,6 +80,9 @@ jQuery(function($) {
     });
   }
 
+// this sends the new RFID value for a particular path to the server
+// if the RFID is already used for another path, an error is displayed and the 
+// value of the input field is deleted
   function postRFID(path, rfid) {
     $.ajax({
       type:     "POST",
@@ -97,11 +107,14 @@ jQuery(function($) {
     });
   }
 
+//convenience function
   function clean(path){
     //return path.replace(/\s|\/|\(|\)|\&|\!|\?|\./g, "");
     return b64EncodeUnicode(path);
   }
 
+
+// create the ul of all the items
   function renderchildren(children) {
     var index, ul;
     var cleanpath="";
@@ -126,6 +139,8 @@ jQuery(function($) {
       }
       else {
         li.append("<input id='"+cleanpath+"' type='text'/>")
+        // for each leaf (no further children), create an input field
+        // and check if an rfid already exists for this path
         getRFID(entry.path)
       }
 
